@@ -7,4 +7,4 @@ SET   first_name = $1,
       hobby = $6,
       birthday $7,
       birth_year= $8
-WHERE condition;
+WHERE id = $9;

@@ -2,10 +2,11 @@ require("dotenv").config();
 const express = require("express"),
   session = require("express-session"),
   passport = require("passport"),
+  bodyParser = require("body-parser"),
   Auth0Strategy = require("passport-auth0"),
   massive = require("massive"),
-  checkLoggedIn = require('./middleware'),
-  ctrl = require('./Controller')
+  checkLoggedIn = require("./middleware"),
+  ctrl = require("./Controller");
 
 const {
   SERVER_PORT,
@@ -24,6 +25,8 @@ massive(CONNECTION_STRING).then(db => {
 });
 
 app.use(express.static(__dirname + "./../build"));
+app.use(bodyParser.json());
+
 
 app.use(
   session({
@@ -49,10 +52,15 @@ passport.use(
       const db = app.get("db");
       db.find_user([profile.id]).then(userResult => {
         if (!userResult[0]) {
-          console.log(profile)
+          console.log(profile);
           db
-            .create_user([profile.displayName, profile.id, profile.picture])
-            .then(createdUser => {
+            .create_user([
+              profile.id,
+              profile.picture,
+              profile.name.givenName,
+              profile.name.familyName
+            ])
+            .then(createUser => {
               return done(null, createUser[0].id);
             });
         } else {
@@ -97,14 +105,16 @@ app.get("/auth/me", function(req, res) {
 //   req.logOut();
 //   res.redirect("http://localhost:3000/");
 // });
-app.get('/auth/logout', function (req, res){
-  req.session.destroy(function (err) {
-    console.log('session ended')
-    res.redirect('http://localhost:3000'); 
+app.get("/auth/logout", function(req, res) {
+  req.session.destroy(function(err) {
+    console.log("session ended");
+    res.redirect("http://localhost:3000");
   });
 });
-app.get('/checkLoggedIn', checkLoggedIn);
-app.patch('/api/user/patch/:id', ctrl.userPatch);
+app.get("/checkLoggedIn", checkLoggedIn);
+app.get("/getUserInfo", ctrl.getUserInfo);
+app.patch("/api/user/patch", ctrl.userPatch);
+app.get('userSearch/:search_parameter/:search_input', ctrl.userSearch)
 
 
 app.listen(SERVER_PORT, () => console.log(`listening on port: ${SERVER_PORT}`));

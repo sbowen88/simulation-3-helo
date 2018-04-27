@@ -1,4 +1,4 @@
 insert into helo_users 
-(display_name, auth_id, profile_pic)
-values ($1, $2, $3)
+( auth_id,profile_picture,first_name, last_name)
+values ($1, $2, $3, $4)
 returning *;

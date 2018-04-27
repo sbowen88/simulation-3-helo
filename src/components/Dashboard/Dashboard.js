@@ -9,10 +9,9 @@ class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {}
+      user: []
     };
   }
-
   componentDidMount() {
     axios
       .get("/checkLoggedIn")
@@ -21,18 +20,25 @@ class Dashboard extends Component {
         console.log("error");
         this.props.history.push("/");
       });
+    this.getUserInfo();
+  }
+  getUserInfo() {
+    axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
   }
 
   render() {
+    console.log(this.state.user);
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
           <div className="left_header">
             <p className="dashboard_header_helo">Helo</p>
             <img src={house} alt="house logo" />
-            <Link  to='/search'><img className='search_icon' src={search} alt="search" /></Link>
+            <Link to="/search">
+              <img className="search_icon" src={search} alt="search" />
+            </Link>
           </div>
-          <p className="dashboard_link">  Dashboard</p>
+          <p className="dashboard_link"> Dashboard</p>
           <a className="logout_button" href="http://localhost:3005/auth/logout">
             Logout
           </a>
@@ -40,16 +46,12 @@ class Dashboard extends Component {
         <div className="display_user_container">
           <div className="user_container">
             <div className="user_img_container">
-              <img
-                src=""
-                alt="user profile img"
-                className="user_img"
-              />
+              <img src="" alt="user profile img" className="user_img" />
             </div>
             <div className="user_info_container">
-              <span className="user_text">First name</span>
+              <span className="user_text">{this.state.user.first_name}</span>
               <br />
-              <span className="user_text">Last Name</span>
+              <span className="user_text">{this.state.user.last_name}</span>
               <br />
               <Link to="/profile">
                 <button type="" className="edit_button">
@@ -60,7 +62,7 @@ class Dashboard extends Component {
           </div>
           <div className="welcome_parent_container">
             <div className="welcome_text_containter">
-              <p className='welcome_text'>
+              <p className="welcome_text">
                 Welcome to Helo! Find recommended friends based on your
                 similarities, and even search for them by name. The more you
                 update your profile, the better recommendations we can make!
