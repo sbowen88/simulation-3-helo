@@ -13,8 +13,8 @@ module.exports = {
   },
   userPatch: (req, res) => {
     let db = req.app.get("db");
-    console.log(req.body);
     let user_id = req.session.passport.user;
+    console.log(req.body, user_id);
     let {
       first_name,
       last_name,

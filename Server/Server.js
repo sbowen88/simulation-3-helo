@@ -113,7 +113,7 @@ app.get("/auth/logout", function(req, res) {
 });
 app.get("/checkLoggedIn", checkLoggedIn);
 app.get("/getUserInfo", ctrl.getUserInfo);
-app.patch("/api/user/patch", ctrl.userPatch);
+app.patch("/user/patch", ctrl.userPatch);
 app.get('userSearch/:search_parameter/:search_input', ctrl.userSearch)
 
 

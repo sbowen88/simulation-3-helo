@@ -60,7 +60,7 @@ class Profile extends Component {
       birth_year
     };
 
-    axios.patch("/api/user/patch", body).then(res => {
+    axios.patch("user/patch", body).then(res => {
       this.props.history.push("/dashboard");
     });
   }
