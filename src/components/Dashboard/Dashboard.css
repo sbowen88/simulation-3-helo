@@ -118,3 +118,8 @@ user_img_container {
   height: 40px;
   justify-content: space-between;
 }
+.pagination{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}

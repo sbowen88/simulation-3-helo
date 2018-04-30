@@ -11,14 +11,15 @@ class Profile extends Component {
 
     this.state = {
       user: [],
-      first_name:'',
-      last_name: '',
-      gender: '',
-      hair_color:'',
-      eye_color:'',
-      hobby:'',
-      birthday:'',
-      birth_year:''
+      first_name: "",
+      last_name: "",
+      gender: "",
+      hair_color: "",
+      eye_color: "",
+      hobby: "",
+      birthday: "",
+      birthday_month:'',
+      birth_year: ""
     };
   }
 
@@ -36,7 +37,22 @@ class Profile extends Component {
     this.getUserInfo();
   }
   getUserInfo() {
-    axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
+    axios
+      .get("/getUserInfo")
+      .then(resp =>
+        this.setState({
+          user: resp.data,
+          first_name: resp.data.first_name,
+          last_name: resp.data.last_name,
+          gender: resp.data.gender,
+          eye_color: resp.data.eye_color,
+          hair_color: resp.data.hair_color,
+          hobby: resp.data.hobby,
+          birthday: resp.data.birthday,
+          birthday_month: resp.data.birthday_month,
+          birth_year:resp.data.birth_year
+        })
+      );
   }
   patchUser() {
     let {
@@ -47,6 +63,7 @@ class Profile extends Component {
       eye_color,
       hobby,
       birthday,
+      birthday_month,
       birth_year
     } = this.state;
     let body = {
@@ -57,16 +74,17 @@ class Profile extends Component {
       eye_color,
       hobby,
       birthday,
+      birthday_month,
       birth_year
     };
 
-    axios.patch("user/patch", body).then(res => {
+    axios.patch("/userPatch", body).then(res => {
       this.props.history.push("/dashboard");
     });
   }
 
   render() {
-    console.log(this.state)
+    console.log(this.state);
     const yearsArray = [];
     const thisYear = 2018;
     for (let i = 0; i <= 100; i++) {
@@ -79,7 +97,7 @@ class Profile extends Component {
         </option>
       );
     });
-    
+
     return (
       <div className="profile_root">
         <div className="dashboard_header">
@@ -88,8 +106,8 @@ class Profile extends Component {
             <Link to="/Dashboard">
               <img className="search_icon" src={house} alt="house logo" />
             </Link>
-            <Link to ='/search'>
-            <img className="search_icon" src={search} alt="search" />
+            <Link to="/search">
+              <img className="search_icon" src={search} alt="search" />
             </Link>
           </div>
           <p className="dashboard_link">Profile</p>
@@ -103,15 +121,23 @@ class Profile extends Component {
               <img src="" alt="user profile img" className="user_img" />
             </div>
             <div className="user_info_container">
-              <div className="profile_user_text">{this.state.user.first_name}</div>
+              <div className="profile_user_text">
+                {this.state.user.first_name}
+              </div>
               <br />
-              <div className="profile_user_text">{this.state.user.last_name}</div>
+              <div className="profile_user_text">
+                {this.state.user.last_name}
+              </div>
               <br />
             </div>
           </div>
           <div className="update_buttons_container">
-            <button className="update_button" onClick={_=>this.patchUser()}>Update</button>
-            <button className="cancel_button">Cancel</button>
+            <button className="update_button" onClick={_ => this.patchUser()}>
+              Update
+            </button>
+            <button className="cancel_button" onClick={_ => this.getUserInfo()}>
+              Cancel
+            </button>
           </div>
         </div>
         <div className="edit_profile">
@@ -139,9 +165,9 @@ class Profile extends Component {
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("gender", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
-                <option value="1">Female</option>
-                <option value="2">Male</option>
+                <option defaultValue>{this.state.gender}</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
               </select>
             </div>
             <div className="attribute">
@@ -151,12 +177,12 @@ class Profile extends Component {
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("hair_color", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
-                <option value="1">Blonde</option>
-                <option value="2">Brown</option>
-                <option value="3">Red</option>
-                <option value="4">Black</option>
-                <option value="5">Grey</option>
+                <option defaultValue>{this.state.hair_color}</option>
+                <option value="Blonde">Blonde</option>
+                <option value="Brown">Brown</option>
+                <option value="Red">Red</option>
+                <option value="Black">Black</option>
+                <option value="Grey">Grey</option>
               </select>
             </div>
             <div className="attribute">
@@ -166,12 +192,12 @@ class Profile extends Component {
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("eye_color", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
-                <option value="1">Black</option>
-                <option value="2">Blue</option>
-                <option value="3">Brown</option>
-                <option value="4">Green</option>
-                <option value="5">Hazel</option>
+                <option defaultValue>{this.state.eye_color}</option>
+                <option value="Black">Black</option>
+                <option value="Blue">Blue</option>
+                <option value="Brown">Brown</option>
+                <option value="Green">Green</option>
+                <option value="Hazel">Hazel</option>
               </select>
             </div>
           </div>
@@ -183,12 +209,12 @@ class Profile extends Component {
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("hobby", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
-                <option value="1">Sports</option>
-                <option value="2">Camping</option>
-                <option value="3">Cooking</option>
-                <option value="4">Movies</option>
-                <option value="5">Sewing</option>
+                <option defaultValue>{this.state.hobby}</option>
+                <option value="Sports">Sports</option>
+                <option value="Camping">Camping</option>
+                <option value="Cooking">Cooking</option>
+                <option value="Movies">Movies</option>
+                <option value="Sewing">Sewing</option>
               </select>
             </div>
             <div className="attribute">
@@ -196,8 +222,10 @@ class Profile extends Component {
               <select
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
+                onChange={e => this.handleChange("birthday", e.target.value)}
+
               >
-                <option defaultValue>Choose...</option>
+                <option defaultValue>{this.state.birthday}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -236,21 +264,21 @@ class Profile extends Component {
               <select
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
-                onChange={e => this.handleChange("Birth", e.target.value)}
+                onChange={e => this.handleChange("birthday_month", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
-                <option value="1">January</option>
-                <option value="2">February</option>
-                <option value="3">March</option>
-                <option value="4">April</option>
-                <option value="5">May</option>
-                <option value="6">June</option>
-                <option value="7">July</option>
-                <option value="8">August</option>
-                <option value="9">September</option>
-                <option value="10">October</option>
-                <option value="11">November</option>
-                <option value="12">December</option>
+                <option defaultValue>{this.state.birthday_month}</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
               </select>
             </div>
             <div className="attribute">
@@ -260,7 +288,7 @@ class Profile extends Component {
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("birth_year", e.target.value)}
               >
-                <option defaultValue>Choose...</option>
+                <option defaultValue>{this.state.birth_year}</option>
                 {stuff}
               </select>
             </div>

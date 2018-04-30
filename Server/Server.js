@@ -27,7 +27,6 @@ massive(CONNECTION_STRING).then(db => {
 app.use(express.static(__dirname + "./../build"));
 app.use(bodyParser.json());
 
-
 app.use(
   session({
     secret: SESSION_SECRET,
@@ -113,8 +112,8 @@ app.get("/auth/logout", function(req, res) {
 });
 app.get("/checkLoggedIn", checkLoggedIn);
 app.get("/getUserInfo", ctrl.getUserInfo);
-app.patch("/user/patch", ctrl.userPatch);
-app.get('userSearch/:search_parameter/:search_input', ctrl.userSearch)
-
+app.get("getRecommended/:sorted_parameter", ctrl.getRecommended);
+app.patch("/userPatch", ctrl.userPatch);
+app.get("userSearch/:search_parameter/:search_input", ctrl.userSearch);
 
 app.listen(SERVER_PORT, () => console.log(`listening on port: ${SERVER_PORT}`));

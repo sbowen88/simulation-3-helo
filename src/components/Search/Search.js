@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import "./Search.css";
 import house from "./../Images/house.png";
 import search from "./../Images/search.png";
+import Pagination from "react-js-pagination";
+
 
 class Search extends Component {
   constructor(props) {
@@ -36,10 +38,10 @@ class Search extends Component {
     this.setState({ [prop]: val });
   }
   changeFriendStatus(index) {
-    this.setState({ users:![index].friend_status });
-      let body = {
-        friend_status: this.state.users[index].friend_status
-      };
+    this.setState({ users: ![index].friend_status });
+    let body = {
+      friend_status: this.state.users[index].friend_status
+    };
     axios.put("/changefriend_status", body).then(req => {});
     this.userSearch();
   }
@@ -49,7 +51,7 @@ class Search extends Component {
       return (
         <div className="filtered_user">
           <div className="filtered_user_img">
-            <img src="" alt="" />
+            <img src={this.state.users[index].profile_pic} alt="" />
           </div>
           <div className="filtered_user_name">
             <span className="filtered_user_first_name" />
@@ -110,7 +112,15 @@ class Search extends Component {
               <button className="reset_button">Reset</button>
             </div>
           </div>
-          {users}
+          <div className="Search_filtered_users_parent">{users}</div>
+          <Pagination
+            className="pagination"
+            activePage={this.state.activePage}
+            itemsCountPerPage={4}
+            totalItemsCount={this.state.users.length}
+            pageRangeDisplayed={this.props.totalItemsCount/this.props.itemsCountPerPage}
+            onChange={_ => this.handlePageChange}
+          />
         </div>
       </div>
     );

@@ -4,12 +4,16 @@ import { Link } from "react-router-dom";
 import "./Dashboard.css";
 import house from "./../Images/house.png";
 import search from "./../Images/search.png";
+import Pagination from "react-js-pagination";
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: []
+      user: [],
+      activePage: 1,
+      sort_parameter: "",
+      users: []
     };
   }
   componentDidMount() {
@@ -22,8 +26,28 @@ class Dashboard extends Component {
       });
     this.getUserInfo();
   }
+  handleChange(prop, val) {
+    this.setState({ [prop]: val });
+  }
   getUserInfo() {
     axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
+  }
+  getRecommended() {
+    axios
+      .get(`getRecommended/${this.state.sort_parameter}`)
+      .then(resp => this.setState({ users: resp.data }));
+  }
+  changeFriendStatus(index) {
+    this.setState({ users: ![index].friend_status });
+    let body = {
+      friend_status: this.state.users[index].friend_status
+    };
+    axios.put("/changefriend_status", body).then(req => {});
+    this.getRecommended();
+  }
+  handlePageChange(pageNumber) {
+    console.log(`active page is ${pageNumber}`);
+    this.setState({ activePage: pageNumber });
   }
 
   render() {
@@ -46,7 +70,7 @@ class Dashboard extends Component {
         <div className="display_user_container">
           <div className="user_container">
             <div className="user_img_container">
-              <img src="" alt="user profile img" className="user_img" />
+              <img src={this.state.user.profile_pic} alt="user profile img" className="user_img" />
             </div>
             <div className="user_info_container">
               <span className="user_text">{this.state.user.first_name}</span>
@@ -74,11 +98,38 @@ class Dashboard extends Component {
           <div className="recommended_friends_header">
             <div className="recommended_friends_title">Recommended Friends</div>
             <div className="sorted_by_parent">
-              Sorted by <button className="sorted_by_dropdown" />
+              Sort by{" "}
+              <select
+                className="custom-select mr-sm-2 search_bar_dropdown"
+                id="inlineFormCustomSelect"
+                onChange={e =>
+                  this.handleChange("sort_parameter", e.target.value)
+                }
+              >
+                <option defaultValue>...</option>
+                <option value="1">First Name</option>
+                <option value="2">Last Name</option>
+                <option value="3">Gender</option>
+                <option value="4">Hair Color</option>
+                <option value="5">Eye Color</option>
+                <option value="6">Hobby</option>
+                <option value="7">Birthday</option>
+                <option value="8">Birth Year</option>
+              </select>
             </div>
             {/* recommended friends will populate here */}
           </div>
         </div>
+        
+          <Pagination
+            className="pagination"
+            activePage={this.state.activePage}
+            itemsCountPerPage={4}
+            totalItemsCount={this.state.users.length}
+            pageRangeDisplayed={this.props.totalItemsCount/this.props.itemsCountPerPage}
+            onChange={_ => this.handlePageChange}
+          />
+        
       </div>
     );
   }

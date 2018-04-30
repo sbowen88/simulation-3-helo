@@ -23,6 +23,7 @@ module.exports = {
       eye_color,
       hobby,
       birthday,
+      birthday_month,
       birth_year
     } = req.body;
 
@@ -35,15 +36,29 @@ module.exports = {
         eye_color,
         hobby,
         birthday,
+        birthday_month,
         birth_year,
         user_id
       ])
       .then(resp => {
-        res.status(200).send(resp);
+        res.status(200).send(resp[0]);
         console.log('Profile Updated');
       })
       .catch(() => res.status(500).send());
       console.log('not updated')
+  },
+  getRecommended: (req, res) => {
+    req.app
+      .get("db")
+      .getRecommended(req.params.sort_parameter)
+      .then(users => {
+        console.log("filtered users", users);
+        res.status(200).send(users);
+      })
+      .catch(err => {
+        console.log("couldnt find users", err);
+        res.status(500).send();
+      });
   },
   userSearch: (req, res) => {
     req.app
