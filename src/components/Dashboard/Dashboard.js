@@ -27,14 +27,17 @@ class Dashboard extends Component {
     this.getUserInfo();
   }
   handleChange(prop, val) {
-    this.setState({ [prop]: val });
+    this.setState({ [prop]: val },_=>this.getRecommended())
+    
   }
   getUserInfo() {
     axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
   }
   getRecommended() {
+    console.log(this.state.user[this.state.sort_parameter]);
     axios
-      .get(`getRecommended/${this.state.sort_parameter}`)
+    //for second param, want to send the property on user that matches the sort_parameter (whatever that may be)
+      .get(`/getRecommended/${this.state.sort_parameter}/${this.state.user[this.state.sort_parameter]}`)
       .then(resp => this.setState({ users: resp.data }));
   }
   changeFriendStatus(index) {
@@ -48,10 +51,32 @@ class Dashboard extends Component {
   handlePageChange(pageNumber) {
     console.log(`active page is ${pageNumber}`);
     this.setState({ activePage: pageNumber });
+    this.getRecommended();
   }
 
   render() {
-    console.log(this.state.user);
+    const users =this.state.users.length>0?this.state.users.map((user, index) => {
+      return (
+        <div className="filtered_user">
+          <div className="filtered_user_img">
+            <img src={this.state.users[index].profile_pic} alt="" />
+          </div>
+          <div className="filtered_user_name">
+            <span className="filtered_user_first_name" >{this.state.users[index].first_name}</span>
+            <span className="filtered_user_last_name" >{this.state.users[index].last_name}</span>
+          </div>
+          <div className="filtered_user_add_btn_container">
+            <button
+              className="filtered_user_add_btn"
+              onClick={this.changeFriendStatus(index)}
+            >
+              {/* need to call on the friend status of this one user{this.setState.friend_status ? "Remove Friend" : "Add Friend"} */}
+            </button>
+          </div>
+        </div>
+      );
+    }):null;
+    console.log("hello", this.state.user[this.state.sort_parameter]);
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
@@ -70,7 +95,11 @@ class Dashboard extends Component {
         <div className="display_user_container">
           <div className="user_container">
             <div className="user_img_container">
-              <img src={this.state.user.profile_pic} alt="user profile img" className="user_img" />
+              <img
+                src={this.state.user.profile_pic}
+                alt="user profile img"
+                className="user_img"
+              />
             </div>
             <div className="user_info_container">
               <span className="user_text">{this.state.user.first_name}</span>
@@ -107,29 +136,31 @@ class Dashboard extends Component {
                 }
               >
                 <option defaultValue>...</option>
-                <option value="1">First Name</option>
-                <option value="2">Last Name</option>
-                <option value="3">Gender</option>
-                <option value="4">Hair Color</option>
-                <option value="5">Eye Color</option>
-                <option value="6">Hobby</option>
-                <option value="7">Birthday</option>
-                <option value="8">Birth Year</option>
+                <option value="first_name">First Name</option>
+                <option value="last_name">Last Name</option>
+                <option value="gender">Gender</option>
+                <option value="hair_color">Hair Color</option>
+                <option value="eye_color">Eye Color</option>
+                <option value="hobby">Hobby</option>
+                <option value="birthday">Birthday</option>
+                <option value="birthday_month">Birthday Month</option>
+                <option value="birth_year">Birth Year</option>
               </select>
             </div>
-            {/* recommended friends will populate here */}
+            {users}
           </div>
         </div>
-        
-          <Pagination
-            className="pagination"
-            activePage={this.state.activePage}
-            itemsCountPerPage={4}
-            totalItemsCount={this.state.users.length}
-            pageRangeDisplayed={this.props.totalItemsCount/this.props.itemsCountPerPage}
-            onChange={_ => this.handlePageChange}
-          />
-        
+
+        <Pagination
+          className="pagination"
+          activePage={this.state.activePage}
+          itemsCountPerPage={4}
+          totalItemsCount={this.state.users.length}
+          pageRangeDisplayed={
+            this.props.totalItemsCount / this.props.itemsCountPerPage
+          }
+          onChange={_ => this.handlePageChange}
+        />
       </div>
     );
   }

@@ -112,8 +112,8 @@ app.get("/auth/logout", function(req, res) {
 });
 app.get("/checkLoggedIn", checkLoggedIn);
 app.get("/getUserInfo", ctrl.getUserInfo);
-app.get("getRecommended/:sorted_parameter", ctrl.getRecommended);
+app.get("/getRecommended/:sort_parameter/:user_parameter", ctrl.getRecommended);
 app.patch("/userPatch", ctrl.userPatch);
-app.get("userSearch/:search_parameter/:search_input", ctrl.userSearch);
+app.get("/userSearch/:search_parameter/:search_input", ctrl.userSearch);
 
 app.listen(SERVER_PORT, () => console.log(`listening on port: ${SERVER_PORT}`));

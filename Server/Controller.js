@@ -48,9 +48,11 @@ module.exports = {
       console.log('not updated')
   },
   getRecommended: (req, res) => {
-    req.app
-      .get("db")
-      .getRecommended(req.params.sort_parameter)
+    let db = req.app.get("db");
+    let {sort_parameter, user_parameter} =req.body;
+    console.log('getting recommended', req.params.sort_parameter, req.params.user_parameter)
+    db
+      .getRecommended(sort_parameter, user_parameter)
       .then(users => {
         console.log("filtered users", users);
         res.status(200).send(users);
@@ -61,8 +63,8 @@ module.exports = {
       });
   },
   userSearch: (req, res) => {
-    req.app
-      .get("db")
+    let db = req.app.get("db");
+      db
       .userSearch(req.params.search_parameter, req.params.search_input)
       .then(users => {
         console.log("filtered users", users);
