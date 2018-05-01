@@ -34,7 +34,7 @@ class Profile extends Component {
         console.log("error");
         this.props.history.push("/");
       });
-    this.getUserInfo();
+     this.getUserInfo();
   }
   getUserInfo() {
     axios
@@ -54,6 +54,7 @@ class Profile extends Component {
         })
       );
   }
+
   patchUser() {
     let {
       first_name,
@@ -164,8 +165,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("gender", e.target.value)}
+                value={this.state.gender}
               >
-                <option defaultValue>{this.state.gender}</option>
                 <option value="Female">Female</option>
                 <option value="Male">Male</option>
               </select>
@@ -176,8 +177,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("hair_color", e.target.value)}
+                value={this.state.hair_color}
               >
-                <option defaultValue>{this.state.hair_color}</option>
                 <option value="Blonde">Blonde</option>
                 <option value="Brown">Brown</option>
                 <option value="Red">Red</option>
@@ -191,8 +192,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("eye_color", e.target.value)}
+                value={this.state.eye_color}
               >
-                <option defaultValue>{this.state.eye_color}</option>
                 <option value="Black">Black</option>
                 <option value="Blue">Blue</option>
                 <option value="Brown">Brown</option>
@@ -208,8 +209,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("hobby", e.target.value)}
+                value = {this.state.hobby}
               >
-                <option defaultValue>{this.state.hobby}</option>
                 <option value="Sports">Sports</option>
                 <option value="Camping">Camping</option>
                 <option value="Cooking">Cooking</option>
@@ -223,9 +224,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("birthday", e.target.value)}
-
+                value={this.state.birthday}
               >
-                <option defaultValue>{this.state.birthday}</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -265,8 +265,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("birthday_month", e.target.value)}
+                value={this.state.birthday_month}
               >
-                <option defaultValue>{this.state.birthday_month}</option>
                 <option value="January">January</option>
                 <option value="February">February</option>
                 <option value="March">March</option>
@@ -287,8 +287,8 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("birth_year", e.target.value)}
+                value={this.state.birth_year}
               >
-                <option defaultValue>{this.state.birth_year}</option>
                 {stuff}
               </select>
             </div>

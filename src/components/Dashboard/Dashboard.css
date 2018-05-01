@@ -109,8 +109,9 @@ user_img_container {
   margin-top: 20px;
 }
 .recommended_friends_parent_container {
-  width: 100%;
+  width: 60%;
   height: auto;
+  background: white;
 }
 .recommended_friends_header {
   display: flex;
@@ -118,7 +119,40 @@ user_img_container {
   height: 40px;
   justify-content: space-between;
 }
-.pagination{
+.recommended_friends_title {
+  font-size: 22px;
+  margin: 5px;
+}
+.users_list {
+  overflow: auto;
+  flex-wrap: wrap;
+}
+.filtered_user {
+  height: 120px;
+  width: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 2px 1px 2px 0 rgba(0, 0, 0, 0.2);
+}
+.filtered_user_add_btn {
+  height: 35px;
+  border-radius: 1px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  background-image: radial-gradient(circle at 50% -46%, #ff9770, #ff7a6e);
+  
+}
+.filtered_user_img {
+  width: 100px;
+  height: 100px;
+}
+.pagination {
   width: 100%;
   display: flex;
   justify-content: space-evenly;

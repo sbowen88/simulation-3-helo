@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import logo from "./../Images/logo.png";
 import './Login.css'
 
@@ -18,8 +17,6 @@ class Login extends Component {
     );
   }
 }
-function mapStateToProps(state) {
-  return {};
-}
 
-export default connect(mapStateToProps)(Login);
+
+export default Login

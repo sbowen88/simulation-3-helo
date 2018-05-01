@@ -25,19 +25,26 @@ class Dashboard extends Component {
         this.props.history.push("/");
       });
     this.getUserInfo();
+    this.getUsers();
   }
   handleChange(prop, val) {
-    this.setState({ [prop]: val },_=>this.getRecommended())
-    
+    this.setState({ [prop]: val }, _ => this.getRecommended());
   }
   getUserInfo() {
     axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
   }
+
+  getUsers() {
+    axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
+  }
   getRecommended() {
     console.log(this.state.user[this.state.sort_parameter]);
     axios
-    //for second param, want to send the property on user that matches the sort_parameter (whatever that may be)
-      .get(`/getRecommended/${this.state.sort_parameter}/${this.state.user[this.state.sort_parameter]}`)
+      .get(
+        `/getRecommended/${this.state.sort_parameter}/${
+          this.state.user[this.state.sort_parameter]
+        }`
+      )
       .then(resp => this.setState({ users: resp.data }));
   }
   changeFriendStatus(index) {
@@ -55,28 +62,41 @@ class Dashboard extends Component {
   }
 
   render() {
-    const users =this.state.users.length>0?this.state.users.map((user, index) => {
-      return (
-        <div className="filtered_user">
-          <div className="filtered_user_img">
-            <img src={this.state.users[index].profile_pic} alt="" />
-          </div>
-          <div className="filtered_user_name">
-            <span className="filtered_user_first_name" >{this.state.users[index].first_name}</span>
-            <span className="filtered_user_last_name" >{this.state.users[index].last_name}</span>
-          </div>
-          <div className="filtered_user_add_btn_container">
-            <button
-              className="filtered_user_add_btn"
-              onClick={this.changeFriendStatus(index)}
-            >
-              {/* need to call on the friend status of this one user{this.setState.friend_status ? "Remove Friend" : "Add Friend"} */}
-            </button>
-          </div>
-        </div>
-      );
-    }):null;
-    console.log("hello", this.state.user[this.state.sort_parameter]);
+    const users =
+      this.state.users.length > 0
+        ? this.state.users.map((user, index) => {
+            return (
+              <div key={index} className="filtered_user">
+                <div className="filtered_user_img">
+                  <img src={this.state.users[index].profile_pic} alt="" />
+                </div>
+                <div className="filtered_user_name">
+                  <span className="filtered_user_first_name">
+                    {this.state.users[index].first_name}
+                  </span>
+                  {"    "}
+                  <span className="filtered_user_last_name">
+                    {this.state.users[index].last_name}
+                  </span>
+                  {"     "}
+                </div>
+                <div className="filtered_user_add_btn_container">
+                  <button
+                    className="filtered_user_add_btn"
+                    // onClick={this.changeFriendStatus(index)}
+                  >
+                  Add Friend
+                  </button>
+                </div>
+              </div>
+            );
+          })
+        : null;
+    console.log(
+      "hello",
+      this.state.user[this.state.sort_parameter],
+      this.state.users
+    );
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
@@ -147,8 +167,8 @@ class Dashboard extends Component {
                 <option value="birth_year">Birth Year</option>
               </select>
             </div>
-            {users}
           </div>
+          <div className="users_list">{users}</div>
         </div>
 
         <Pagination

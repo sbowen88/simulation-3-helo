@@ -112,6 +112,7 @@ app.get("/auth/logout", function(req, res) {
 });
 app.get("/checkLoggedIn", checkLoggedIn);
 app.get("/getUserInfo", ctrl.getUserInfo);
+app.get('/getUsers', ctrl.getUsers);
 app.get("/getRecommended/:sort_parameter/:user_parameter", ctrl.getRecommended);
 app.patch("/userPatch", ctrl.userPatch);
 app.get("/userSearch/:search_parameter/:search_input", ctrl.userSearch);
