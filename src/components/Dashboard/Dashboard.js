@@ -13,7 +13,9 @@ class Dashboard extends Component {
       user: [],
       activePage: 1,
       sort_parameter: "",
-      users: []
+      users: [],
+      currentPage: 1,
+      usersPerPage: 4
     };
   }
   componentDidMount() {
@@ -47,6 +49,11 @@ class Dashboard extends Component {
       )
       .then(resp => this.setState({ users: resp.data }));
   }
+  handleClick(e) {
+    this.setState({
+      currentPage: Number(e.target.id)
+    });
+  }
   changeFriendStatus(index) {
     this.setState({ users: ![index].friend_status });
     let body = {
@@ -55,20 +62,39 @@ class Dashboard extends Component {
     axios.put("/changefriend_status", body).then(req => {});
     this.getRecommended();
   }
-  handlePageChange(pageNumber) {
-    console.log(`active page is ${pageNumber}`);
-    this.setState({ activePage: pageNumber });
-    this.getRecommended();
-  }
 
   render() {
-    const users =
+    const { users, currentPage, usersPerPage } = this.state;
+
+    // Logic for displaying current todos
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+    // Logic for displaying page numbers
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
+      return (
+        <li key={number} id={number} onClick={_ => this.handleClick}>
+          {number}
+        </li>
+      );
+    });
+    const renderUsers =
       this.state.users.length > 0
-        ? this.state.users.map((user, index) => {
+        ? currentUsers.map((user, index) => {
             return (
               <div key={index} className="filtered_user">
-                <div className="filtered_user_img">
-                  <img src={this.state.users[index].profile_pic} alt="" />
+                <div className="filtered_user_img_container">
+                  <img
+                    className="filtered_user_img"
+                    src={this.state.users[index].profile_picture}
+                    alt=""
+                  />
                 </div>
                 <div className="filtered_user_name">
                   <span className="filtered_user_first_name">
@@ -85,7 +111,7 @@ class Dashboard extends Component {
                     className="filtered_user_add_btn"
                     // onClick={this.changeFriendStatus(index)}
                   >
-                  Add Friend
+                    Add Friend
                   </button>
                 </div>
               </div>
@@ -168,19 +194,11 @@ class Dashboard extends Component {
               </select>
             </div>
           </div>
-          <div className="users_list">{users}</div>
+          <div className="users_list">{renderUsers}</div>
         </div>
-
-        <Pagination
-          className="pagination"
-          activePage={this.state.activePage}
-          itemsCountPerPage={4}
-          totalItemsCount={this.state.users.length}
-          pageRangeDisplayed={
-            this.props.totalItemsCount / this.props.itemsCountPerPage
-          }
-          onChange={_ => this.handlePageChange}
-        />
+        <div className="pagenumber_container">
+          <ul id="page-numbers">{renderPageNumbers}</ul>
+        </div>
       </div>
     );
   }
