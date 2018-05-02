@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import "./Dashboard.css";
 import house from "./../Images/house.png";
 import search from "./../Images/search.png";
-import Pagination from "react-js-pagination";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -15,8 +14,9 @@ class Dashboard extends Component {
       sort_parameter: "",
       users: [],
       currentPage: 1,
-      usersPerPage: 4
+      usersPerPage: 3
     };
+    this.handleClick = this.handleClick.bind(this);
   }
   componentDidMount() {
     axios
@@ -40,7 +40,7 @@ class Dashboard extends Component {
     axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
   }
   getRecommended() {
-    console.log(this.state.user[this.state.sort_parameter]);
+    console.log(this.state.sort_parameter,this.state.user[this.state.sort_parameter]);
     axios
       .get(
         `/getRecommended/${this.state.sort_parameter}/${
@@ -54,22 +54,23 @@ class Dashboard extends Component {
       currentPage: Number(e.target.id)
     });
   }
-  changeFriendStatus(index) {
-    this.setState({ users: ![index].friend_status });
-    let body = {
-      friend_status: this.state.users[index].friend_status
-    };
-    axios.put("/changefriend_status", body).then(req => {});
-    this.getRecommended();
-  }
+  // changeFriendStatus(index) {
+  //   this.setState({ users: ![index].friend_status });
+  //   let body = {
+  //     friend_status: this.state.users[index].friend_status
+  //   };
+  //   axios.put("/changefriend_status", body).then(req => {});
+  //   this.getRecommended();
+  // }
 
   render() {
     const { users, currentPage, usersPerPage } = this.state;
-
-    // Logic for displaying current todos
+    
+    // Logic for displaying current users
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    console.log(currentUsers)
 
     // Logic for displaying page numbers
     const pageNumbers = [];
@@ -79,7 +80,7 @@ class Dashboard extends Component {
 
     const renderPageNumbers = pageNumbers.map(number => {
       return (
-        <li key={number} id={number} onClick={_ => this.handleClick}>
+        <li key={number} id={number} onClick={this.handleClick}>
           {number}
         </li>
       );
@@ -111,18 +112,14 @@ class Dashboard extends Component {
                     className="filtered_user_add_btn"
                     // onClick={this.changeFriendStatus(index)}
                   >
-                    Add Friend
+                   <p className='add_btn_text'> Add Friend</p>
                   </button>
                 </div>
               </div>
             );
           })
         : null;
-    console.log(
-      "hello",
-      this.state.user[this.state.sort_parameter],
-      this.state.users
-    );
+
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
@@ -197,7 +194,7 @@ class Dashboard extends Component {
           <div className="users_list">{renderUsers}</div>
         </div>
         <div className="pagenumber_container">
-          <ul id="page-numbers">{renderPageNumbers}</ul>
+          <ul className="page-numbers">{renderPageNumbers}</ul>
         </div>
       </div>
     );

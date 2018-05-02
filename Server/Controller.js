@@ -49,9 +49,10 @@ module.exports = {
   },
   getUsers: (req, res) => {
     let db = req.app.get("db");
+    let id = req.session.passport.user;
     console.log("getting all users");
     db
-      .getUsers()
+      .getUsers(id)
       .then(users => {
         res.status(200).send(users);
       })

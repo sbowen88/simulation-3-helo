@@ -1,4 +1,4 @@
-SELECT * FROM friends
+SELECT * FROM users
 WHERE 
 friend_status = false
 AND

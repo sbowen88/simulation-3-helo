@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import "./Search.css";
 import house from "./../Images/house.png";
 import search from "./../Images/search.png";
-import Pagination from "react-js-pagination";
-
 
 class Search extends Component {
   constructor(props) {
@@ -13,8 +11,11 @@ class Search extends Component {
     this.state = {
       search_parameter: "",
       search_input: "",
-      users: []
+      users: [],
+      currentPage: 1,
+      usersPerPage: 3
     };
+    this.handleClick = this.handleClick.bind(this);
   }
 
   componentDidMount() {
@@ -25,6 +26,15 @@ class Search extends Component {
         console.log("error");
         this.props.history.push("/");
       });
+    this.getUsers();
+  }
+  getUsers() {
+    axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
+  }
+  handleClick(e) {
+    this.setState({
+      currentPage: Number(e.target.id)
+    });
   }
   userSearch() {
     axios
@@ -37,37 +47,63 @@ class Search extends Component {
   handleChange(prop, val) {
     this.setState({ [prop]: val });
   }
-  changeFriendStatus(index) {
-    this.setState({ users: ![index].friend_status });
-    let body = {
-      friend_status: this.state.users[index].friend_status
-    };
-    axios.put("/changefriend_status", body).then(req => {});
-    this.userSearch();
-  }
 
   render() {
-    const users = this.state.users.map((user, index) => {
+    const { users, currentPage, usersPerPage } = this.state;
+
+    // Logic for displaying current users
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
+    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    console.log(currentUsers);
+
+    const pageNumbers = [];
+    for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+      pageNumbers.push(i);
+    }
+
+    const renderPageNumbers = pageNumbers.map(number => {
       return (
-        <div className="filtered_user">
-          <div className="filtered_user_img">
-            <img src={this.state.users[index].profile_pic} alt="" />
-          </div>
-          <div className="filtered_user_name">
-            <span className="filtered_user_first_name" />
-            <span className="filtered_user_last_name" />
-          </div>
-          <div className="filtered_user_add_btn_container">
-            <button
-              className="filtered_user_add_btn"
-              onClick={this.changeFriendStatus(index)}
-            >
-              {/* need to call on the friend status of this one user{this.setState.friend_status ? "Remove Friend" : "Add Friend"} */}
-            </button>
-          </div>
-        </div>
+        <li key={number} id={number} onClick={this.handleClick}>
+          {number}
+        </li>
       );
     });
+
+    const renderUsers =
+    this.state.users.length > 0
+      ? currentUsers.map((user, index) => {
+          return (
+            <div key={index} className="filtered_user">
+              <div className="filtered_user_img_container">
+                <img
+                  className="filtered_user_img"
+                  src={this.state.users[index].profile_picture}
+                  alt=""
+                />
+              </div>
+              <div className="filtered_user_name">
+                <span className="filtered_user_first_name">
+                  {this.state.users[index].first_name}
+                </span>
+                {"    "}
+                <span className="filtered_user_last_name">
+                  {this.state.users[index].last_name}
+                </span>
+                {"     "}
+              </div>
+              <div className="filtered_user_add_btn_container">
+                <button
+                  className="filtered_user_add_btn"
+                  // onClick={this.changeFriendStatus(index)}
+                >
+                 <p className='add_btn_text'> Add Friend</p>
+                </button>
+              </div>
+            </div>
+          );
+        })
+      : null;
     return (
       <div className="search_root">
         <div className="dashboard_header">
@@ -112,15 +148,10 @@ class Search extends Component {
               <button className="reset_button">Reset</button>
             </div>
           </div>
-          <div className="Search_filtered_users_parent">{users}</div>
-          <Pagination
-            className="pagination"
-            activePage={this.state.activePage}
-            itemsCountPerPage={4}
-            totalItemsCount={this.state.users.length}
-            pageRangeDisplayed={this.props.totalItemsCount/this.props.itemsCountPerPage}
-            onChange={_ => this.handlePageChange}
-          />
+          <div className="users_list">{renderUsers}</div>
+        </div>
+        <div className="pagenumber_container">
+          <ul className="page-numbers">{renderPageNumbers}</ul>
         </div>
       </div>
     );
