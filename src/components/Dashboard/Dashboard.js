@@ -41,7 +41,10 @@ class Dashboard extends Component {
     axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
   }
   getRecommended() {
-    console.log(this.state.sort_parameter,this.state.user[this.state.sort_parameter]);
+    console.log(
+      this.state.sort_parameter,
+      this.state.user[this.state.sort_parameter]
+    );
     axios
       .get(
         `/getRecommended/${this.state.sort_parameter}/${
@@ -50,12 +53,11 @@ class Dashboard extends Component {
       )
       .then(resp => this.setState({ users: resp.data }));
   }
-  addFriend( user_id, friend_id ) {
-     axios.post('/addFriend', { user_id, friend_id } ).then( response => {
-       response.data;
-       this.getUsers();
-      } )
-     
+  addFriend(user_id, friend_id) {
+    axios.post("/addFriend", { user_id, friend_id }).then(response => {
+      response.data;
+      this.getUsers();
+    });
   }
   handleClick(e) {
     this.setState({
@@ -73,12 +75,12 @@ class Dashboard extends Component {
 
   render() {
     const { users, currentPage, usersPerPage } = this.state;
-    
+
     // Logic for displaying current users
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    console.log(currentUsers)
+    console.log(currentUsers);
 
     // Logic for displaying page numbers
     const pageNumbers = [];
@@ -96,8 +98,7 @@ class Dashboard extends Component {
     const renderUsers =
       this.state.users.length > 0
         ? currentUsers.map((user, index) => {
-          return (
-            user.user_id !== this.state.user.id?
+            return user.user_id !== this.state.user.id ? (
               <div key={index} className="filtered_user">
                 <div className="filtered_user_img_container">
                   <img
@@ -119,14 +120,18 @@ class Dashboard extends Component {
                 <div className="filtered_user_add_btn_container">
                   <button
                     className="filtered_user_add_btn"
-                    onClick={ () => this.addFriend( this.state.user.id, this.state.users[index].id ) }
+                    onClick={() =>
+                      this.addFriend(
+                        this.state.user.id,
+                        this.state.users[index].id
+                      )
+                    }
                   >
-                   <p className='add_btn_text'> Add Friend</p>
+                    <p className="add_btn_text"> Add Friend</p>
                   </button>
                 </div>
               </div>
-              : null
-            );
+            ) : null;
           })
         : null;
 

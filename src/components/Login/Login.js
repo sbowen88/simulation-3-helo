@@ -8,7 +8,7 @@ class Login extends Component {
       <div className="root">
         <div className="login_container">
           <img className="helo_logo" src={logo} alt="" />
-          <h1 className="login__app_name">HELO</h1>
+          <h1 className="login__app_name">Helo</h1>
           <a className="login_button" href={process.env.REACT_APP_LOGIN}>
             Login/Register
           </a>

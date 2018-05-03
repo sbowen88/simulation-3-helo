@@ -11,6 +11,7 @@ class Search extends Component {
     this.state = {
       search_parameter: "",
       search_input: "",
+      user: [],
       users: [],
       currentPage: 1,
       usersPerPage: 3
@@ -26,7 +27,11 @@ class Search extends Component {
         console.log("error");
         this.props.history.push("/");
       });
+    this.getUserInfo();
     this.getUsers();
+  }
+  getUserInfo() {
+    axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
   }
   getUsers() {
     axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
@@ -44,10 +49,10 @@ class Search extends Component {
       .then(resp => this.setState({ users: resp.data }));
   }
   addFriend(user_id, friend_id) {
-    axios
-      .post("/addFriend", { user_id, friend_id })
-      .then(response => response.data)
-      .then(this.getUsers());
+    axios.post("/addFriend", { user_id, friend_id }).then(response => {
+      response.data;
+      this.getUsers();
+    });
   }
   deleteProperty() {
     axios
@@ -55,9 +60,10 @@ class Search extends Component {
       .then(this.props.getProperties());
   }
   removeFriend(user_id, friend_id) {
-    axios
-      .delete(`/removeFriend/${user_id}/${friend_id}`)
-      .then(this.getUsers());
+    axios.delete(`/removeFriend/${user_id}/${friend_id}`).then(response => {
+      response.data;
+      this.getUsers();
+    });
   }
 
   handleChange(prop, val) {
@@ -109,17 +115,27 @@ class Search extends Component {
                   {"     "}
                 </div>
                 <div className="filtered_user_add_btn_container">
-                  {/* {friend_status ? (
+                  {user.user_id === this.state.user.id ? (
                     <button
-                      className="Search__user_btn black-btn"
-                      onClick={() => this.removeFriend(this.state.user.id, this.state.users[index].id)}
+                      className="remove_friend_button"
+                      onClick={() =>
+                        this.removeFriend(
+                          this.state.user.id,
+                          this.state.users[index].id
+                        )
+                      }
                     >
                       <p className="add_btn_text"> Remove Friend </p>
                     </button>
-                  ) : ( */}
+                  ) : (
                     <button
                       className="filtered_user_add_btn"
-                      onClick={() => this.addFriend(this.state.user.id, this.state.users[index].id)}
+                      onClick={() =>
+                        this.addFriend(
+                          this.state.user.id,
+                          this.state.users[index].id
+                        )
+                      }
                     >
                       <p className="add_btn_text"> Add Friend</p>
                     </button>

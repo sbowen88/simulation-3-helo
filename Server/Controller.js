@@ -94,9 +94,9 @@ module.exports = {
   removeFriend: (req, res) => {
     let db = req.app.get("db");
     let {user_id, friend_id}=req.params;
-    console.log("getting all users");
+    console.log("Removing friend");
     db
-      .addFriend(user_id, friend_id)
+      .removeFriend(user_id, friend_id)
       .then(users => {
         res.status(200).send();
         console.log('friend removed')

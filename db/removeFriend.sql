@@ -1,2 +1,4 @@
-DELETE FROM friendship(user_id, friend_id)
-VALUES( $1, $2 );
+DELETE FROM friendship
+WHERE user_id = $1
+AND 
+friend_id = $2
