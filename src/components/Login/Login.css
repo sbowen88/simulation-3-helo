@@ -45,3 +45,7 @@ margin: 20px 0 20px 0;
   box-shadow: 0 14px 28px 0 rgba(0, 0, 0, 0.26);
   margin-bottom: 20px;
 }
+.login_button:hover{
+  text-decoration: none;
+  color: white;
+}

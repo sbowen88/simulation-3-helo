@@ -76,6 +76,36 @@ module.exports = {
         res.status(500).send();
       });
   },
+  addFriend: (req, res) => {
+    let db = req.app.get("db");
+    let {user_id, friend_id}=req.body;
+    console.log("adding friend");
+    db
+      .addFriend(user_id, friend_id)
+      .then(users => {
+        res.status(200).send(users);
+        console.log('friend added')
+      })
+      .catch(err => {
+        console.log("couldnt add friend", err);
+        res.status(500).send();
+      });
+  },
+  removeFriend: (req, res) => {
+    let db = req.app.get("db");
+    let {user_id, friend_id}=req.params;
+    console.log("getting all users");
+    db
+      .addFriend(user_id, friend_id)
+      .then(users => {
+        res.status(200).send();
+        console.log('friend removed')
+      })
+      .catch(err => {
+        console.log("couldnt remove friend", err);
+        res.status(500).send();
+      });
+  },
   userSearch: (req, res) => {
     let db = req.app.get("db");
     db

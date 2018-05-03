@@ -29,6 +29,7 @@ class Dashboard extends Component {
     this.getUserInfo();
     this.getUsers();
   }
+
   handleChange(prop, val) {
     this.setState({ [prop]: val }, _ => this.getRecommended());
   }
@@ -48,6 +49,13 @@ class Dashboard extends Component {
         }`
       )
       .then(resp => this.setState({ users: resp.data }));
+  }
+  addFriend( user_id, friend_id ) {
+     axios.post('/addFriend', { user_id, friend_id } ).then( response => {
+       response.data;
+       this.getUsers();
+      } )
+     
   }
   handleClick(e) {
     this.setState({
@@ -88,7 +96,8 @@ class Dashboard extends Component {
     const renderUsers =
       this.state.users.length > 0
         ? currentUsers.map((user, index) => {
-            return (
+          return (
+            user.user_id !== this.state.user.id?
               <div key={index} className="filtered_user">
                 <div className="filtered_user_img_container">
                   <img
@@ -110,12 +119,13 @@ class Dashboard extends Component {
                 <div className="filtered_user_add_btn_container">
                   <button
                     className="filtered_user_add_btn"
-                    // onClick={this.changeFriendStatus(index)}
+                    onClick={ () => this.addFriend( this.state.user.id, this.state.users[index].id ) }
                   >
                    <p className='add_btn_text'> Add Friend</p>
                   </button>
                 </div>
               </div>
+              : null
             );
           })
         : null;

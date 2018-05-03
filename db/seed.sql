@@ -31,3 +31,15 @@ INSERT INTO helo_users(
 VALUES (
  'JB_auth_id', 'Jeff', 'Bridges','https://robohash.org/me', 'Male', 'Grey', 'Blue', 'Camping', 25, 'February', 1955
 )
+--Friendship table 
+CREATE TABLE IF NOT EXISTS friendship(
+table_id SERIAL PRIMARY KEY,
+user_id INTEGER REFERENCES helo_users(id),
+friend_id INTEGER REFERENCES helo_users(id)
+);
+
+--search through all
+SELECT * FROM friends
+RIGHT JOIN users
+ON friends.friend_id = users.id
+WHERE id != $1

@@ -162,7 +162,7 @@ user_img_container {
   height: auto;
 }
 .filtered_user_first_name, .filtered_user_last_name{
-  pagging: 5px;
+  padding: 5px;
 }
 .filtered_user_img_container{
   width: 100px;

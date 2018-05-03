@@ -117,5 +117,7 @@ app.get('/getUsers', ctrl.getUsers);
 app.get("/getRecommended/:sort_parameter/:user_parameter", ctrl.getRecommended);
 app.patch("/userPatch", ctrl.userPatch);
 app.get("/userSearch/:search_parameter/:search_input", ctrl.userSearch);
+app.post("/addFriend", ctrl.addFriend);
+app.delete("/removeFriend/:user_id/:friend_id", ctrl.removeFriend)
 
 app.listen(SERVER_PORT, () => console.log(`listening on port: ${SERVER_PORT}`));

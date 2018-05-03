@@ -43,6 +43,22 @@ class Search extends Component {
       )
       .then(resp => this.setState({ users: resp.data }));
   }
+  addFriend(user_id, friend_id) {
+    axios
+      .post("/addFriend", { user_id, friend_id })
+      .then(response => response.data)
+      .then(this.getUsers());
+  }
+  deleteProperty() {
+    axios
+      .delete(`/deleteProperty/${this.props.id}`)
+      .then(this.props.getProperties());
+  }
+  removeFriend(user_id, friend_id) {
+    axios
+      .delete(`/removeFriend/${user_id}/${friend_id}`)
+      .then(this.getUsers());
+  }
 
   handleChange(prop, val) {
     this.setState({ [prop]: val });
@@ -71,39 +87,50 @@ class Search extends Component {
     });
 
     const renderUsers =
-    this.state.users.length > 0
-      ? currentUsers.map((user, index) => {
-          return (
-            <div key={index} className="filtered_user">
-              <div className="filtered_user_img_container">
-                <img
-                  className="filtered_user_img"
-                  src={this.state.users[index].profile_picture}
-                  alt=""
-                />
+      this.state.users.length > 0
+        ? currentUsers.map((user, index) => {
+            return (
+              <div key={index} className="filtered_user">
+                <div className="filtered_user_img_container">
+                  <img
+                    className="filtered_user_img"
+                    src={this.state.users[index].profile_picture}
+                    alt=""
+                  />
+                </div>
+                <div className="filtered_user_name">
+                  <span className="filtered_user_first_name">
+                    {this.state.users[index].first_name}
+                  </span>
+                  {"    "}
+                  <span className="filtered_user_last_name">
+                    {this.state.users[index].last_name}
+                  </span>
+                  {"     "}
+                </div>
+                <div className="filtered_user_add_btn_container">
+                  {/* {friend_status ? (
+                    <button
+                      className="Search__user_btn black-btn"
+                      onClick={() => this.removeFriend(this.state.user.id, this.state.users[index].id)}
+                    >
+                      <p className="add_btn_text"> Remove Friend </p>
+                    </button>
+                  ) : ( */}
+                    <button
+                      className="filtered_user_add_btn"
+                      onClick={() => this.addFriend(this.state.user.id, this.state.users[index].id)}
+                    >
+                      <p className="add_btn_text"> Add Friend</p>
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="filtered_user_name">
-                <span className="filtered_user_first_name">
-                  {this.state.users[index].first_name}
-                </span>
-                {"    "}
-                <span className="filtered_user_last_name">
-                  {this.state.users[index].last_name}
-                </span>
-                {"     "}
-              </div>
-              <div className="filtered_user_add_btn_container">
-                <button
-                  className="filtered_user_add_btn"
-                  // onClick={this.changeFriendStatus(index)}
-                >
-                 <p className='add_btn_text'> Add Friend</p>
-                </button>
-              </div>
-            </div>
-          );
-        })
-      : null;
+            );
+            {
+            }
+          })
+        : null;
     return (
       <div className="search_root">
         <div className="dashboard_header">
