@@ -46,7 +46,17 @@ class Search extends Component {
       .get(
         `userSearch/${this.state.search_parameter}/${this.state.search_input}`
       )
-      .then(resp => this.setState({ users: resp.data }));
+      .then(resp => {
+        this.setState({ users: resp.data });
+      });
+  }
+  reset = ()=> {
+    this.setState({
+      search_input: "",
+      search_parameter: "...Search By",
+    });
+    this.getUsers()
+    console.log('everything reset', this.state.search_input)
   }
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
@@ -54,11 +64,7 @@ class Search extends Component {
       this.getUsers();
     });
   }
-  deleteProperty() {
-    axios
-      .delete(`/deleteProperty/${this.props.id}`)
-      .then(this.props.getProperties());
-  }
+
   removeFriend(user_id, friend_id) {
     axios.delete(`/removeFriend/${user_id}/${friend_id}`).then(response => {
       response.data;
@@ -77,7 +83,7 @@ class Search extends Component {
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    console.log(currentUsers);
+    // console.log(currentUsers);
 
     const pageNumbers = [];
     for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
@@ -125,7 +131,7 @@ class Search extends Component {
                         )
                       }
                     >
-                      <p className="add_btn_text"> Remove Friend </p>
+                      <p className="remove_btn_text"> Remove Friend </p>
                     </button>
                   ) : (
                     <button
@@ -157,7 +163,7 @@ class Search extends Component {
             </Link>
             <img className="search_icon" src={search} alt="search" />
           </div>
-          <p className="dashboard_link"> Dashboard</p>
+          <Link to ='dashboard' className="dashboard_link"><p className="dashboard_link"> Dashboard</p></Link>
           <a className="logout_button" href="http://localhost:3005/auth/logout">
             Logout
           </a>
@@ -167,28 +173,38 @@ class Search extends Component {
             <select
               className="custom-select mr-sm-2 search_bar_dropdown"
               id="inlineFormCustomSelect"
+              value = {this.state.search_parameter}
               onChange={e =>
                 this.handleChange("search_parameter", e.target.value)
               }
             >
               <option defaultValue>Search by...</option>
-              <option value="1">First Name</option>
-              <option value="2">Last Name</option>
-              <option value="3">Gender</option>
-              <option value="4">Hair Color</option>
-              <option value="5">Eye Color</option>
-              <option value="6">Hobby</option>
-              <option value="7">Birthday</option>
-              <option value="8">Birth Year</option>
+              <option value="first_name">First Name</option>
+              <option value="last_name">Last Name</option>
+              <option value="gender">Gender</option>
+              <option value="hair_color">Hair Color</option>
+              <option value="eye_color">Eye Color</option>
+              <option value="hobby">Hobby</option>
+              <option value="birthday">Birthday</option>
+              <option value="birthday_month">Birthday Month</option>
+              <option value="birth_year">Birth Year</option>
             </select>
             <input
               type="text"
               className="search_input"
               onChange={e => this.handleChange("search_input", e.target.value)}
+              value={this.state.search_input}
             />
             <div className="search_buttons_container">
-              <button className="search_button">Search</button>
-              <button className="reset_button">Reset</button>
+              <button
+                className="search_button"
+                onClick={() => this.userSearch()}
+              >
+                Search
+              </button>
+              <button className="reset_button" onClick={this.reset}>
+                Reset
+              </button>
             </div>
           </div>
           <div className="users_list">{renderUsers}</div>

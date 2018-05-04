@@ -83,3 +83,7 @@ Search_filtered_users_parent{
   border: none;
   cursor: pointer;
 }
+.remove_btn_text{
+  padding: 0px;
+  font-size: 12px;
+}

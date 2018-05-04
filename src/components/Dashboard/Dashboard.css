@@ -37,6 +37,11 @@
 }
 .dashboard_link {
   font-size: 20px;
+  text-decoration: none;
+  color: white;
+}
+dashboard_link:hover{
+  text-decoration: none;
 }
 .logout_button {
   text-decoration: none;

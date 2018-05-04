@@ -63,13 +63,16 @@ module.exports = {
   },
   getRecommended: (req, res) => {
     let db = req.app.get("db");
-    let { sort_parameter, user_parameter } = req.body;
-    console.log("getting recommended friends");
+    let id = req.session.passport.user;
+    console.log(id, req.params.search_parameter, req.params.search_input)
     db
-      .getRecommended(sort_parameter, user_parameter)
+      .userSearch(id)
       .then(users => {
-        console.log("filtered users", users);
-        res.status(200).send(users);
+        console.log("Recommended users", users);
+        let filtered_users=users.filter(e=>{
+          return e[req.params.search_parameter] ===req.params.search_input;
+        })
+        res.status(200).send(filtered_users);
       })
       .catch(err => {
         console.log("couldnt find users", err);
@@ -108,11 +111,16 @@ module.exports = {
   },
   userSearch: (req, res) => {
     let db = req.app.get("db");
+    let id = req.session.passport.user;
+    console.log(id, req.params.search_parameter, req.params.search_input)
     db
-      .userSearch(req.params.search_parameter, req.params.search_input)
+      .userSearch(id)
       .then(users => {
         console.log("filtered users", users);
-        res.status(200).send(users);
+        let filtered_users=users.filter(e=>{
+          return e[req.params.search_parameter] ===req.params.search_input;
+        })
+        res.status(200).send(filtered_users);
       })
       .catch(err => {
         console.log("couldnt find users", err);
