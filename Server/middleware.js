@@ -1,7 +1,7 @@
 module.exports = function(req, res) {
-    console.log(req.session)
-  if (req.session.passport) {
-    res.status(200).send();
+    console.log('checking logged in, req.user: ',req.user)
+  if (req.user) {
+    res.status(200).send(req.user);
     console.log('logged in')
   }
  else {

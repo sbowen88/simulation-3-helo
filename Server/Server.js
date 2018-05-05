@@ -52,7 +52,7 @@ passport.use(
       let picture = 'https://robohash.org/me'
       db.find_user([profile.id]).then(userResult => {
         if (!userResult[0]) {
-          console.log(profile);
+          // console.log(profile);
           db
             .create_user([
               profile.id,
@@ -77,16 +77,19 @@ passport.serializeUser((id, done) => {
 }); ///runs once on login
 //runs before each endpoint is hit, after login
 passport.deserializeUser((id, done) => {
+  console.log('deserialize, id:',id)
   //puts info on req.user
   app
     .get("db")
     .find_session_user([id])
     .then(loggedInUser => {
-      done(null, loggedInUser[0]);
+      console.log('loggedInUser: ',loggedInUser)
+      done(null, loggedInUser[0]); //loggedInUser[0]
     });
 });
 
-app.get("/auth", passport.authenticate("auth0"));
+app.get("/auth", passport.authenticate("auth0", {successRedirect: "http://localhost:3000/#/dashboard",
+failureRedirect: "http://localhost:3000"}), );
 app.get(
   "/auth/callback",
   passport.authenticate("auth0", {
@@ -95,6 +98,7 @@ app.get(
   })
 );
 app.get("/auth/me", function(req, res) {
+  console.log('authenticating...', req.user)
   if (req.user) {
     res.status(200).send(req.user);
   } else {
@@ -106,11 +110,15 @@ app.get("/auth/me", function(req, res) {
 //   res.redirect("http://localhost:3000/");
 // });
 app.get("/auth/logout", function(req, res) {
-  req.session.destroy(function(err) {
-    console.log("session ended");
-    res.redirect("http://localhost:3000");
-  });
+  console.log('loggin out ')
+  req.logOut();
+  res.send({"req.user":req.user})
+  // req.session.destroy(function(err) {
+  //   console.log("session ended");
+  //   res.redirect("http://localhost:3000");
+  // });
 });
+// req.logOut() req.session.destroy()
 app.get("/checkLoggedIn", checkLoggedIn);
 app.get("/getUserInfo", ctrl.getUserInfo);
 app.get('/getUsers', ctrl.getUsers);

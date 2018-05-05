@@ -163,10 +163,14 @@ class Search extends Component {
             </Link>
             <img className="search_icon" src={search} alt="search" />
           </div>
-          <Link to ='dashboard' className="dashboard_link"><p className="dashboard_link"> Dashboard</p></Link>
-          <a className="logout_button" href="http://localhost:3005/auth/logout">
+          <Link to ='dashboard' className="dashboard_link_link"><p className="dashboard_link"> Dashboard</p></Link>
+          <button className="logout_button" onClick={()=>{
+            console.log('loggin out')
+            axios.get("/auth/logout").then(res=>{
+              this.props.history.push('/');
+            })}}>
             Logout
-          </a>
+          </button>
         </div>
         <div className="search_container">
           <div className="search_bar">

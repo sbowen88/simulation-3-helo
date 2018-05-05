@@ -112,14 +112,18 @@ class Profile extends Component {
             </Link>
           </div>
           <p className="dashboard_link">Profile</p>
-          <a className="logout_button" href="http://localhost:3005/auth/logout">
+          <button className="logout_button" onClick={()=>{
+            console.log('loggin out')
+            axios.get("/auth/logout").then(res=>{
+              this.props.history.push('/');
+            })}}>
             Logout
-          </a>
+          </button>
         </div>
         <div className="profile_display_user_container">
           <div className="user_container">
             <div className="user_img_container">
-              <img src="" alt="user profile img" className="user_img" />
+              <img src={this.state.user.profile_picture} alt="user profile img" className="user_img" />
             </div>
             <div className="user_info_container">
               <div className="profile_user_text">

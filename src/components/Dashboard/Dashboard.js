@@ -14,7 +14,7 @@ class Dashboard extends Component {
       sort_parameter: "",
       users: [],
       currentPage: 1,
-      usersPerPage: 3
+      usersPerPage: 4
     };
     this.handleClick = this.handleClick.bind(this);
   }
@@ -146,15 +146,19 @@ class Dashboard extends Component {
             </Link>
           </div>
           <p className="dashboard_link"> Dashboard</p>
-          <a className="logout_button" href="http://localhost:3005/auth/logout">
+          <button className="logout_button" onClick={()=>{
+            console.log('loggin out')
+            axios.get("/auth/logout").then(res=>{
+              this.props.history.push('/');
+            })}}>
             Logout
-          </a>
+          </button>
         </div>
         <div className="display_user_container">
           <div className="user_container">
             <div className="user_img_container">
               <img
-                src={this.state.user.profile_pic}
+                src={this.state.user.profile_picture}
                 alt="user profile img"
                 className="user_img"
               />

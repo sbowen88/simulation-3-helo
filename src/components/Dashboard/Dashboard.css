@@ -35,18 +35,31 @@
 .left_header > p {
   font-size: 33px;
 }
+.dashboard_link_link:hover {
+  text-decoration: none;
+  color: white;
+}
 .dashboard_link {
   font-size: 20px;
   text-decoration: none;
   color: white;
 }
-dashboard_link:hover{
+dashboard_link:hover {
   text-decoration: none;
+  color: white;
 }
 .logout_button {
   text-decoration: none;
   color: white;
   font-size: 20px;
+  background-color: transparent;
+  border: none;
+}
+
+.logout_button:focus {outline:0;}
+.logout_button:hover {
+  color: white;
+  text-decoration: none;
 }
 .display_user_container {
   height: 200px;
@@ -108,6 +121,8 @@ user_img_container {
   font-size: 18px;
   font-weight: 100;
   border-radius: 4px;
+  margin-bottom: 65px;
+  background-image: radial-gradient(circle at 50% 0,#fff,#f1eceb);
 }
 .user_text {
   font-size: 20px;
@@ -149,7 +164,7 @@ user_img_container {
   margin-right: 20px;
   margin-bottom: 20px;
   position: relative;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.2);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.2);
 }
 .filtered_user_add_btn {
   height: 35px;
@@ -160,24 +175,24 @@ user_img_container {
   border: none;
   cursor: pointer;
   background-image: radial-gradient(circle at 50% -46%, #ff9770, #ff7a6e);
-  
 }
-.filtered_user_name{
+.filtered_user_name {
   width: 20px;
   height: auto;
 }
-.filtered_user_first_name, .filtered_user_last_name{
+.filtered_user_first_name,
+.filtered_user_last_name {
   padding: 5px;
 }
-.filtered_user_img_container{
+.filtered_user_img_container {
   width: 100px;
-  height:100px;
+  height: 100px;
 }
 .filtered_user_img {
   width: 100%;
   height: 100%;
 }
-.add_btn_text{
+.add_btn_text {
   font-size: 12px;
   padding: 11px;
 }
@@ -189,19 +204,24 @@ user_img_container {
   margin-right: 0.3em;
   color: black;
   background: white;
-  width: 15px;
+  width: 25px;
   display: flex;
   justify-content: center;
   user-select: none;
   cursor: pointer;
-  height: 50%;
+  height: 23px;
+  align-items: center;
 }
-.pagenumber_container{
-  height: 30px;
-  width: 60%;  
+.page-numbers > li:hover {
+  color: white;
+  background: black;
+}
+.pagenumber_container {
+  height: 50px;
+  width: 60%;
   background-image: radial-gradient(circle at 50% -46%, #ff9770, #ff7a6e);
   display: flex;
   justify-content: center;
   align-items: center;
-
+  margin-bottom: 10px;
 }

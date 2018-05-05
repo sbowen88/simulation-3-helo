@@ -70,7 +70,7 @@ module.exports = {
       .then(users => {
         console.log("Recommended users", users);
         let filtered_users=users.filter(e=>{
-          return e[req.params.search_parameter] ===req.params.search_input;
+          return e[req.params.sort_parameter] ===req.params.user_parameter;
         })
         res.status(200).send(filtered_users);
       })
