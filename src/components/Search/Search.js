@@ -54,6 +54,7 @@ class Search extends Component {
     this.setState({
       search_input: "",
       search_parameter: "...Search By",
+      currentPage:1
     });
     this.getUsers()
     console.log('everything reset', this.state.search_input)

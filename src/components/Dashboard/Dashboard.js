@@ -64,14 +64,7 @@ class Dashboard extends Component {
       currentPage: Number(e.target.id)
     });
   }
-  // changeFriendStatus(index) {
-  //   this.setState({ users: ![index].friend_status });
-  //   let body = {
-  //     friend_status: this.state.users[index].friend_status
-  //   };
-  //   axios.put("/changefriend_status", body).then(req => {});
-  //   this.getRecommended();
-  // }
+
 
   render() {
     const { users, currentPage, usersPerPage } = this.state;
@@ -80,7 +73,7 @@ class Dashboard extends Component {
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    console.log(currentUsers);
+    console.log(currentUsers, indexOfFirstUser, indexOfLastUser, currentPage);
 
     // Logic for displaying page numbers
     const pageNumbers = [];

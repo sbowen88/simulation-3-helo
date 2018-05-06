@@ -49,7 +49,7 @@ passport.use(
     function(accessToken, refreshToken, extraParams, profile, done) {
       //db calls
       const db = app.get("db");
-      let picture = 'https://robohash.org/me'
+      let picture = `https://robohash.org/${Math.floor((Math.random()+1) *1000)}`
       db.find_user([profile.id]).then(userResult => {
         if (!userResult[0]) {
           // console.log(profile);
