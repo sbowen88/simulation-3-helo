@@ -65,7 +65,6 @@ class Dashboard extends Component {
     });
   }
 
-
   render() {
     const { users, currentPage, usersPerPage } = this.state;
 
@@ -139,13 +138,18 @@ class Dashboard extends Component {
             </Link>
           </div>
           <p className="dashboard_link"> Dashboard</p>
-          <button className="logout_button" onClick={()=>{
-            console.log('loggin out')
-            axios.get("/auth/logout").then(res=>{
-              this.props.history.push('/');
-            })}}>
-            Logout
+          <button
+            className="logout_button"
+            onClick={() => {
+              console.log("loggin out");
+            }}
+          >
+            <a href='http://localhost:3005/auth/logout'>Logout</a>
           </button>
+
+          {/* axios.get("/auth/logout").then(res=>{
+              this.props.history.push('/');
+            }) */}
         </div>
         <div className="display_user_container">
           <div className="user_container">
