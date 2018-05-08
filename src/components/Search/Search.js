@@ -107,17 +107,17 @@ class Search extends Component {
                 <div className="filtered_user_img_container">
                   <img
                     className="filtered_user_img"
-                    src={this.state.users[index].profile_picture}
+                    src={user.profile_picture}
                     alt=""
                   />
                 </div>
                 <div className="filtered_user_name">
                   <span className="filtered_user_first_name">
-                    {this.state.users[index].first_name}
+                    {user.first_name}
                   </span>
                   {"    "}
                   <span className="filtered_user_last_name">
-                    {this.state.users[index].last_name}
+                    {user.last_name}
                   </span>
                   {"     "}
                 </div>
@@ -167,10 +167,11 @@ class Search extends Component {
           <Link to ='dashboard' className="dashboard_link_link"><p className="dashboard_link"> Dashboard</p></Link>
           <button className="logout_button" onClick={()=>{
             console.log('loggin out')
-            axios.get("/auth/logout").then(res=>{
-              this.props.history.push('/');
-            })}}>
-            Logout
+            // axios.get("/auth/logout").then(res=>{
+            //   this.props.history.push('/');
+            // })
+            }}>
+            <a href='http://localhost:3005/auth/logout'>Logout</a>
           </button>
         </div>
         <div className="search_container">

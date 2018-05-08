@@ -119,7 +119,7 @@ app.get("/auth/me", function(req, res) {
 app.get("/auth/logout", function(req, res) {
   console.log("loggin out ");
   req.logOut();
-  res.redirect(`https://scottblank.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000&client_id=${CLIENT_ID}
+  res.redirect(302,`https://scottblank.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000
     `);
   // http://localhost:3000
   // res.send({"req.user":req.user})

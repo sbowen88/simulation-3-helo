@@ -225,3 +225,12 @@ user_img_container {
   align-items: center;
   margin-bottom: 10px;
 }
+a{
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  text-decoration: none;
+  color: white;
+  text-decoration: none;
+}

@@ -10,7 +10,7 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       user: [],
-      activePage: 1,
+      // activePage: 1,
       sort_parameter: "",
       users: [],
       currentPage: 1,
@@ -64,48 +64,49 @@ class Dashboard extends Component {
       currentPage: Number(e.target.id)
     });
   }
-
+componentDidUpdate(oldProps, oldState) {
+  console.log('update' , oldState, 'new state' , this.state)
+}
   render() {
-    const { users, currentPage, usersPerPage } = this.state;
+    let { users, currentPage, usersPerPage } = this.state;
 
     // Logic for displaying current users
-    const indexOfLastUser = currentPage * usersPerPage;
-    const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    let indexOfLastUser = currentPage * usersPerPage;
+    let indexOfFirstUser = indexOfLastUser - usersPerPage;
+    let currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
     console.log(currentUsers, indexOfFirstUser, indexOfLastUser, currentPage);
 
     // Logic for displaying page numbers
-    const pageNumbers = [];
+    let pageNumbers = [];
     for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
       pageNumbers.push(i);
     }
-
-    const renderPageNumbers = pageNumbers.map(number => {
+    console.log(pageNumbers, 'pages')
+    let renderPageNumbers = pageNumbers.map(number => {
       return (
         <li key={number} id={number} onClick={this.handleClick}>
           {number}
         </li>
       );
     });
-    const renderUsers =
-      this.state.users.length > 0
-        ? currentUsers.map((user, index) => {
+    let renderUsers = currentUsers.map((user, index) => {
+          console.log(user, 'user')
             return user.user_id !== this.state.user.id ? (
               <div key={index} className="filtered_user">
                 <div className="filtered_user_img_container">
                   <img
                     className="filtered_user_img"
-                    src={this.state.users[index].profile_picture}
+                    src={user.profile_picture}
                     alt=""
                   />
                 </div>
                 <div className="filtered_user_name">
                   <span className="filtered_user_first_name">
-                    {this.state.users[index].first_name}
+                    {user.first_name}
                   </span>
                   {"    "}
                   <span className="filtered_user_last_name">
-                    {this.state.users[index].last_name}
+                    {user.last_name}
                   </span>
                   {"     "}
                 </div>
@@ -125,8 +126,7 @@ class Dashboard extends Component {
               </div>
             ) : null;
           })
-        : null;
-
+console.log(renderUsers)
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
