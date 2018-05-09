@@ -18,8 +18,9 @@ class Profile extends Component {
       eye_color: "",
       hobby: "",
       birthday: "",
-      birthday_month:'',
-      birth_year: ""
+      birthday_month: "",
+      birth_year: "",
+      show_required: false
     };
   }
 
@@ -34,25 +35,23 @@ class Profile extends Component {
         console.log("error");
         this.props.history.push("/");
       });
-     this.getUserInfo();
+    this.getUserInfo();
   }
   getUserInfo() {
-    axios
-      .get("/getUserInfo")
-      .then(resp =>
-        this.setState({
-          user: resp.data,
-          first_name: resp.data.first_name,
-          last_name: resp.data.last_name,
-          gender: resp.data.gender,
-          eye_color: resp.data.eye_color,
-          hair_color: resp.data.hair_color,
-          hobby: resp.data.hobby,
-          birthday: resp.data.birthday,
-          birthday_month: resp.data.birthday_month,
-          birth_year:resp.data.birth_year
-        })
-      );
+    axios.get("/getUserInfo").then(resp =>
+      this.setState({
+        user: resp.data,
+        first_name: resp.data.first_name?resp.data.first_name:'',
+        last_name: resp.data.last_name?resp.data.last_name:'',
+        gender: resp.data.gender?resp.data.gender:'',
+        eye_color: resp.data.eye_color?resp.data.eye_color:'',
+        hair_color: resp.data.hair_color?resp.data.hair_color:'',
+        hobby: resp.data.hobby?resp.data.hobby:'',
+        birthday: resp.data.birthday?resp.data.birthday:'',
+        birthday_month: resp.data.birthday_month?resp.data.birthday_month:'',
+        birth_year: resp.data.birth_year?resp.data.birth_year:''
+      })
+    );
   }
 
   patchUser() {
@@ -78,14 +77,27 @@ class Profile extends Component {
       birthday_month,
       birth_year
     };
-
-    axios.patch("/userPatch", body).then(res => {
-      this.props.history.push("/dashboard");
-    });
+    if (!birthday) {
+      this.setState({
+        show_required: true
+      });
+    } else {
+      this.setState({
+        show_required: false
+      });
+      axios.patch("/userPatch", body).then(res => {
+        this.props.history.push("/dashboard");
+      });
+    }
   }
 
   render() {
     console.log(this.state);
+    const required_error = (
+      <div className="open-sans" style={{ color: "red", marginTop: "30px" }}>
+        Required fields: Birthday day, month, and year.
+      </div>
+    );
     const yearsArray = [];
     const thisYear = 2018;
     for (let i = 0; i <= 100; i++) {
@@ -112,18 +124,26 @@ class Profile extends Component {
             </Link>
           </div>
           <p className="dashboard_link">Profile</p>
-          <button className="logout_button" onClick={()=>{
-            console.log('loggin out')
-            axios.get("/auth/logout").then(res=>{
-              this.props.history.push('/');
-            })}}>
+          <button
+            className="logout_button"
+            onClick={() => {
+              console.log("loggin out");
+              axios.get("/auth/logout").then(res => {
+                this.props.history.push("/");
+              });
+            }}
+          >
             Logout
           </button>
         </div>
         <div className="profile_display_user_container">
           <div className="user_container">
             <div className="user_img_container">
-              <img src={this.state.user.profile_picture} alt="user profile img" className="user_img" />
+              <img
+                src={this.state.user.profile_picture}
+                alt="user profile img"
+                className="user_img"
+              />
             </div>
             <div className="user_info_container">
               <div className="profile_user_text">
@@ -213,7 +233,7 @@ class Profile extends Component {
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("hobby", e.target.value)}
-                value = {this.state.hobby}
+                value={this.state.hobby}
               >
                 <option value="Sports">Sports</option>
                 <option value="Camping">Camping</option>
@@ -268,7 +288,9 @@ class Profile extends Component {
               <select
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
-                onChange={e => this.handleChange("birthday_month", e.target.value)}
+                onChange={e =>
+                  this.handleChange("birthday_month", e.target.value)
+                }
                 value={this.state.birthday_month}
               >
                 <option value="January">January</option>
@@ -297,6 +319,13 @@ class Profile extends Component {
               </select>
             </div>
           </div>
+          {
+                  this.state.show_required
+                  ?
+                  {required_error}
+                  :
+                    null
+                }
         </div>
       </div>
     );

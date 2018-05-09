@@ -39,7 +39,18 @@ friend_id INTEGER REFERENCES helo_users(id)
 );
 
 --search through all
-SELECT * FROM friends
-RIGHT JOIN users
-ON friends.friend_id = users.id
+SELECT * FROM friendship
+RIGHT JOIN helo_users
+ON friendship.friend_id = helo_users.id
 WHERE id != $1
+
+--fake emails
+--bogusemail@fakeemail.com
+
+--redoing sql files
+--get frienship list that have my id (in backend)
+--get all of users ()
+--once I have both arrays, loop through users array, for every user, loop through friends list to see if user is one of my friends 
+--if that is true, add a new property to user object like 'is friend: true'
+--all will be done on backend
+--this endpoint should return all of the users with an indication whether or not they are friend

@@ -10,7 +10,6 @@ class Dashboard extends Component {
     super(props);
     this.state = {
       user: [],
-      // activePage: 1,
       sort_parameter: "",
       users: [],
       currentPage: 1,

@@ -14,9 +14,10 @@ class Search extends Component {
       user: [],
       users: [],
       currentPage: 1,
-      usersPerPage: 3
+      usersPerPage: 4
     };
     this.handleClick = this.handleClick.bind(this);
+    this.formatCase = this.formatCase.bind(this);
   }
 
   componentDidMount() {
@@ -50,15 +51,15 @@ class Search extends Component {
         this.setState({ users: resp.data });
       });
   }
-  reset = ()=> {
+  reset = () => {
     this.setState({
       search_input: "",
       search_parameter: "...Search By",
-      currentPage:1
+      currentPage: 1
     });
-    this.getUsers()
-    console.log('everything reset', this.state.search_input)
-  }
+    this.getUsers();
+    console.log("everything reset", this.state.search_input);
+  };
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
       response.data;
@@ -75,6 +76,17 @@ class Search extends Component {
 
   handleChange(prop, val) {
     this.setState({ [prop]: val });
+  }
+  handleInputChange(prop, val) {
+    this.setState({ [prop]: this.formatCase(val) });
+  }
+  formatCase(str) {
+    //if no string return empty string
+    if (str) {
+      return str[0].toUpperCase() + str.slice(1).toLowerCase();
+    } else {
+      null;
+    }
   }
 
   render() {
@@ -126,10 +138,7 @@ class Search extends Component {
                     <button
                       className="remove_friend_button"
                       onClick={() =>
-                        this.removeFriend(
-                          this.state.user.id,
-                          this.state.users[index].id
-                        )
+                        this.removeFriend(this.state.user.id, user.id)
                       }
                     >
                       <p className="remove_btn_text"> Remove Friend </p>
@@ -138,10 +147,7 @@ class Search extends Component {
                     <button
                       className="filtered_user_add_btn"
                       onClick={() =>
-                        this.addFriend(
-                          this.state.user.id,
-                          this.state.users[index].id
-                        )
+                        this.addFriend(this.state.user.id, user.id)
                       }
                     >
                       <p className="add_btn_text"> Add Friend</p>
@@ -164,14 +170,16 @@ class Search extends Component {
             </Link>
             <img className="search_icon" src={search} alt="search" />
           </div>
-          <Link to ='dashboard' className="dashboard_link_link"><p className="dashboard_link"> Dashboard</p></Link>
-          <button className="logout_button" onClick={()=>{
-            console.log('loggin out')
-            // axios.get("/auth/logout").then(res=>{
-            //   this.props.history.push('/');
-            // })
-            }}>
-            <a href='http://localhost:3005/auth/logout'>Logout</a>
+          <Link to="dashboard" className="dashboard_link_link">
+            <p className="dashboard_link"> Dashboard</p>
+          </Link>
+          <button
+            className="logout_button"
+            onClick={() => {
+              console.log("loggin out");
+            }}
+          >
+            <a href="http://localhost:3005/auth/logout">Logout</a>
           </button>
         </div>
         <div className="search_container">
@@ -179,7 +187,7 @@ class Search extends Component {
             <select
               className="custom-select mr-sm-2 search_bar_dropdown"
               id="inlineFormCustomSelect"
-              value = {this.state.search_parameter}
+              value={this.state.search_parameter}
               onChange={e =>
                 this.handleChange("search_parameter", e.target.value)
               }
@@ -198,7 +206,9 @@ class Search extends Component {
             <input
               type="text"
               className="search_input"
-              onChange={e => this.handleChange("search_input", e.target.value)}
+              onChange={e =>
+                this.handleInputChange("search_input", e.target.value)
+              }
               value={this.state.search_input}
             />
             <div className="search_buttons_container">
@@ -213,10 +223,10 @@ class Search extends Component {
               </button>
             </div>
           </div>
-          <div className="users_list">{renderUsers}</div>
-        </div>
-        <div className="pagenumber_container">
-          <ul className="page-numbers">{renderPageNumbers}</ul>
+          <div className="search_users_list">{renderUsers}</div>
+          <div className="search_pagenumber_container">
+            <ul className="page-numbers">{renderPageNumbers}</ul>
+          </div>
         </div>
       </div>
     );

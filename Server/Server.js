@@ -48,11 +48,13 @@ passport.use(
     },
     function(accessToken, refreshToken, extraParams, profile, done) {
       //db calls
+      console.log('authed')
       const db = app.get("db");
       let picture = `https://robohash.org/${Math.floor(
         (Math.random() + 1) * 1000
       )}`;
       db.find_user([profile.id]).then(userResult => {
+        console.log('checked user')
         if (!userResult[0]) {
           // console.log(profile);
           db
@@ -63,9 +65,11 @@ passport.use(
               profile.name.familyName
             ])
             .then(createUser => {
+              console.log('created user')
               return done(null, createUser[0].id);
             });
         } else {
+          console.log('user existed')
           return done(null, userResult[0].id);
         }
       });
@@ -74,20 +78,26 @@ passport.use(
   )
 );
 passport.serializeUser((id, done) => {
+  console.log('user serialized')
   //takes whatever info (profile) and puts it on session, gets invoked once
   done(null, id);
 }); ///runs once on login
 //runs before each endpoint is hit, after login
 passport.deserializeUser((id, done) => {
-  console.log("deserialize, id:", id);
+  console.log('user deserialized', id)
+  // console.log("deserialize, id:", id);
   //puts info on req.user
   app
     .get("db")
     .find_session_user([id])
     .then(loggedInUser => {
       console.log("loggedInUser: ", loggedInUser);
+      // if (err) {
+      //   console.log(err);
+      //   return done(null, err);
+      // }
       done(null, loggedInUser[0]); //loggedInUser[0]
-    });
+    }).catch(err => console.log('err', err))
 });
 
 app.get(
@@ -119,7 +129,12 @@ app.get("/auth/me", function(req, res) {
 app.get("/auth/logout", function(req, res) {
   console.log("loggin out ");
   req.logOut();
-  res.redirect(302,'https://scottblank.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000');
+
+  res.redirect(
+    302,
+    "https://scottblank.auth0.com/v2/logout?returnTo=http%3A%2F%2Flocalhost:3000"
+  );
+  // https://scottblank.auth0.com/v2/logout?returnTo=http%3A%2F%2Fwww.example.com&client_id=CLIENT_ID
   // http://localhost:3000
   // res.send({"req.user":req.user})
   // req.session.destroy(function(err) {

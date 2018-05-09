@@ -54,6 +54,7 @@ module.exports = {
     db
       .getUsers(id)
       .then(users => {
+        // do other db then in second .then do for loop
         res.status(200).send(users);
       })
       .catch(err => {

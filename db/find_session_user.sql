@@ -1,3 +1,3 @@
 SELECT * 
-FROM users 
+FROM helo_users 
 where id = $1;
