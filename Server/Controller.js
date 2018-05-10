@@ -50,12 +50,16 @@ module.exports = {
   getUsers: (req, res) => {
     let db = req.app.get("db");
     let id = req.session.passport.user;
+    let helo_users = [];
+    let friends = []
     console.log("getting all users");
     db
       .getUsers(id)
       .then(users => {
         // do other db then in second .then do for loop
-        res.status(200).send(users);
+        // res.status(200).send(users);
+       db.getFriends //.then
+
       })
       .catch(err => {
         console.log("couldnt find users", err);
