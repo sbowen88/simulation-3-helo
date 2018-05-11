@@ -134,7 +134,7 @@ class Search extends Component {
                   {"     "}
                 </div>
                 <div className="filtered_user_add_btn_container">
-                  {user.user_id === this.state.user.id ? (
+                  {user.is_friend === true ? (
                     <button
                       className="remove_friend_button"
                       onClick={() =>

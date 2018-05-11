@@ -88,9 +88,10 @@ componentDidUpdate(oldProps, oldState) {
         </li>
       );
     });
+    console.log(currentUsers)
     let renderUsers = currentUsers.map((user, index) => {
           console.log(user, 'user')
-            return user.user_id !== this.state.user.id ? (
+            return user.user_id !== this.state.user.id && !user.is_friend ? (
               <div key={index} className="filtered_user">
                 <div className="filtered_user_img_container">
                   <img
