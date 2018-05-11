@@ -25,6 +25,7 @@ class Profile extends Component {
   }
 
   handleChange(prop, val) {
+    console.log("changing");
     this.setState({ [prop]: val });
   }
   componentDidMount() {
@@ -38,20 +39,24 @@ class Profile extends Component {
     this.getUserInfo();
   }
   getUserInfo() {
-    axios.get("/getUserInfo").then(resp =>
+    axios.get("/getUserInfo").then(resp => {
+      console.log("user", resp.data);
       this.setState({
         user: resp.data,
-        first_name: resp.data.first_name?resp.data.first_name:'',
-        last_name: resp.data.last_name?resp.data.last_name:'',
-        gender: resp.data.gender?resp.data.gender:'',
-        eye_color: resp.data.eye_color?resp.data.eye_color:'',
-        hair_color: resp.data.hair_color?resp.data.hair_color:'',
-        hobby: resp.data.hobby?resp.data.hobby:'',
-        birthday: resp.data.birthday?resp.data.birthday:'',
-        birthday_month: resp.data.birthday_month?resp.data.birthday_month:'',
-        birth_year: resp.data.birth_year?resp.data.birth_year:''
-      })
-    );
+        first_name: resp.data.first_name ? resp.data.first_name : "",
+        last_name: resp.data.last_name ? resp.data.last_name : "",
+        gender: resp.data.gender ? resp.data.gender : "",
+        eye_color: resp.data.eye_color ? resp.data.eye_color : "",
+        hair_color: resp.data.hair_color ? resp.data.hair_color : "",
+        hobby: resp.data.hobby ? resp.data.hobby : "",
+        birthday: resp.data.birthday ? resp.data.birthday : "",
+        birthday_month: resp.data.birthday_month
+          ? resp.data.birthday_month
+          : "",
+        birth_year: resp.data.birth_year ? resp.data.birth_year : "",
+        show_required: false
+      });
+    });
   }
 
   patchUser() {
@@ -77,7 +82,8 @@ class Profile extends Component {
       birthday_month,
       birth_year
     };
-    if (!birthday) {
+    if (birthday === "Select") {
+      console.log("test");
       this.setState({
         show_required: true
       });
@@ -92,10 +98,10 @@ class Profile extends Component {
   }
 
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     const required_error = (
-      <div className="open-sans" style={{ color: "red", marginTop: "30px" }}>
-        Required fields: Birthday day, month, and year.
+      <div className="open-sans" style={{ color: "red", marginTop: "20px", marginBottom: "20px" }}>
+        Required fields: Birthday, month, and year.
       </div>
     );
     const yearsArray = [];
@@ -128,12 +134,9 @@ class Profile extends Component {
             className="logout_button"
             onClick={() => {
               console.log("loggin out");
-              axios.get("/auth/logout").then(res => {
-                this.props.history.push("/");
-              });
             }}
           >
-            Logout
+            <a href="http://localhost:3005/auth/logout">Logout</a>
           </button>
         </div>
         <div className="profile_display_user_container">
@@ -243,13 +246,14 @@ class Profile extends Component {
               </select>
             </div>
             <div className="attribute">
-              <span>Birthday Day</span>
+              <span>Birthday</span>
               <select
                 className="custom-select mr-sm-2"
                 id="inlineFormCustomSelect"
                 onChange={e => this.handleChange("birthday", e.target.value)}
                 value={this.state.birthday}
               >
+                <option value="Select">Select</option>
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -319,14 +323,8 @@ class Profile extends Component {
               </select>
             </div>
           </div>
-          {
-                  this.state.show_required
-                  ?
-                  {required_error}
-                  :
-                    null
-                }
         </div>
+        <div>{this.state.show_required ? required_error : null}</div>
       </div>
     );
   }

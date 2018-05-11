@@ -78,20 +78,20 @@ passport.use(
   )
 );
 passport.serializeUser((id, done) => {
-  console.log('user serialized')
+  // console.log('user serialized')
   //takes whatever info (profile) and puts it on session, gets invoked once
   done(null, id);
 }); ///runs once on login
 //runs before each endpoint is hit, after login
 passport.deserializeUser((id, done) => {
-  console.log('user deserialized', id)
+  // console.log('user deserialized', id)
   // console.log("deserialize, id:", id);
   //puts info on req.user
   app
     .get("db")
     .find_session_user([id])
     .then(loggedInUser => {
-      console.log("loggedInUser: ", loggedInUser);
+      // console.log("loggedInUser: ", loggedInUser);
       // if (err) {
       //   console.log(err);
       //   return done(null, err);
@@ -115,7 +115,7 @@ app.get(
   })
 );
 app.get("/auth/me", function(req, res) {
-  console.log("authenticating...", req.user);
+  // console.log("authenticating...", req.user);
   if (req.user) {
     res.status(200).send(req.user);
   } else {

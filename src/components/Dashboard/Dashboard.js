@@ -16,6 +16,7 @@ class Dashboard extends Component {
       usersPerPage: 4
     };
     this.handleClick = this.handleClick.bind(this);
+    this.getRecommended = this.getRecommended.bind(this);
   }
   componentDidMount() {
     axios
@@ -44,13 +45,17 @@ class Dashboard extends Component {
       this.state.sort_parameter,
       this.state.user[this.state.sort_parameter]
     );
-    axios
-      .get(
-        `/getRecommended/${this.state.sort_parameter}/${
-          this.state.user[this.state.sort_parameter]
-        }`
-      )
-      .then(resp => this.setState({ users: resp.data }));
+    // axios
+    //   .get(
+    //     `/getRecommended/${this.state.sort_parameter}/${
+    //       this.state.user[this.state.sort_parameter]
+    //     }`
+    //   )
+    //   .then(resp => this.setState({ users: resp.data }));
+    const recommended_users = this.state.users.filter(user =>{
+      return user[this.state.sort_parameter]===this.state.user[this.state.sort_parameter]? true:false
+   })
+   this.setState({users: recommended_users})
   }
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
@@ -63,9 +68,9 @@ class Dashboard extends Component {
       currentPage: Number(e.target.id)
     });
   }
-componentDidUpdate(oldProps, oldState) {
-  console.log('update' , oldState, 'new state' , this.state)
-}
+// componentDidUpdate(oldProps, oldState) {
+//   console.log('update' , oldState, 'new state' , this.state)
+// }
   render() {
     let { users, currentPage, usersPerPage } = this.state;
 
@@ -73,14 +78,14 @@ componentDidUpdate(oldProps, oldState) {
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
     let currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    console.log(currentUsers, indexOfFirstUser, indexOfLastUser, currentPage);
+    // console.log(currentUsers, indexOfFirstUser, indexOfLastUser, currentPage);
 
     // Logic for displaying page numbers
     let pageNumbers = [];
     for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
       pageNumbers.push(i);
     }
-    console.log(pageNumbers, 'pages')
+    // console.log(pageNumbers, 'pages')
     let renderPageNumbers = pageNumbers.map(number => {
       return (
         <li key={number} id={number} onClick={this.handleClick}>
@@ -88,9 +93,9 @@ componentDidUpdate(oldProps, oldState) {
         </li>
       );
     });
-    console.log(currentUsers)
+    // console.log(currentUsers)
     let renderUsers = currentUsers.map((user, index) => {
-          console.log(user, 'user')
+          // console.log(user, 'user')
             return user.user_id !== this.state.user.id && !user.is_friend ? (
               <div key={index} className="filtered_user">
                 <div className="filtered_user_img_container">
@@ -116,7 +121,7 @@ componentDidUpdate(oldProps, oldState) {
                     onClick={() =>
                       this.addFriend(
                         this.state.user.id,
-                        this.state.users[index].id
+                        user.id
                       )
                     }
                   >

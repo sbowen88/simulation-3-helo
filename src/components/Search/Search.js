@@ -18,6 +18,7 @@ class Search extends Component {
     };
     this.handleClick = this.handleClick.bind(this);
     this.formatCase = this.formatCase.bind(this);
+    this.userSearch = this.userSearch.bind(this);
   }
 
   componentDidMount() {
@@ -43,13 +44,17 @@ class Search extends Component {
     });
   }
   userSearch() {
-    axios
-      .get(
-        `userSearch/${this.state.search_parameter}/${this.state.search_input}`
-      )
-      .then(resp => {
-        this.setState({ users: resp.data });
-      });
+    // axios
+    //   .get(
+    //     `userSearch/${this.state.search_parameter}/${this.state.search_input}`
+    //   )
+    //   .then(resp => {
+    //     this.setState({ users: resp.data });
+    //   });
+    const filtered_users = this.state.users.filter(user =>{
+       return user[this.state.search_parameter]===this.state.search_input? true:false
+    })
+    this.setState({users: filtered_users})
   }
   reset = () => {
     this.setState({
