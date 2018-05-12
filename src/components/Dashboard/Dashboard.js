@@ -41,10 +41,10 @@ class Dashboard extends Component {
     axios.get("/getUsers").then(resp => this.setState({ users: resp.data }));
   }
   getRecommended() {
-    console.log(
-      this.state.sort_parameter,
-      this.state.user[this.state.sort_parameter]
-    );
+    // console.log(
+    //   // this.state.sort_parameter,
+    //   // this.state.user[this.state.sort_parameter]
+    // );
     // axios
     //   .get(
     //     `/getRecommended/${this.state.sort_parameter}/${
@@ -55,7 +55,9 @@ class Dashboard extends Component {
     const recommended_users = this.state.users.filter(user =>{
       return user[this.state.sort_parameter]===this.state.user[this.state.sort_parameter]? true:false
    })
+  
    this.setState({users: recommended_users})
+   console.log(recommended_users)
   }
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
