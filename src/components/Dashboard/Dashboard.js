@@ -52,12 +52,16 @@ class Dashboard extends Component {
     //     }`
     //   )
     //   .then(resp => this.setState({ users: resp.data }));
-    const recommended_users = this.state.users.filter(user =>{
-      return user[this.state.sort_parameter]===this.state.user[this.state.sort_parameter]? true:false
-   })
-  
-   this.setState({users: recommended_users})
-   console.log(recommended_users)
+
+    const recommended_users = this.state.users.filter(user => {
+      return user[this.state.sort_parameter] ===
+        this.state.user[this.state.sort_parameter]
+        ? true
+        : false;
+    });
+
+    this.setState({ users: recommended_users });
+    console.log(recommended_users);
   }
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
@@ -70,9 +74,9 @@ class Dashboard extends Component {
       currentPage: Number(e.target.id)
     });
   }
-// componentDidUpdate(oldProps, oldState) {
-//   console.log('update' , oldState, 'new state' , this.state)
-// }
+  // componentDidUpdate(oldProps, oldState) {
+  //   console.log('update' , oldState, 'new state' , this.state)
+  // }
   render() {
     let { users, currentPage, usersPerPage } = this.state;
 
@@ -97,43 +101,34 @@ class Dashboard extends Component {
     });
     // console.log(currentUsers)
     let renderUsers = currentUsers.map((user, index) => {
-          // console.log(user, 'user')
-            return user.user_id !== this.state.user.id && !user.is_friend ? (
-              <div key={index} className="filtered_user">
-                <div className="filtered_user_img_container">
-                  <img
-                    className="filtered_user_img"
-                    src={user.profile_picture}
-                    alt=""
-                  />
-                </div>
-                <div className="filtered_user_name">
-                  <span className="filtered_user_first_name">
-                    {user.first_name}
-                  </span>
-                  {"    "}
-                  <span className="filtered_user_last_name">
-                    {user.last_name}
-                  </span>
-                  {"     "}
-                </div>
-                <div className="filtered_user_add_btn_container">
-                  <button
-                    className="filtered_user_add_btn"
-                    onClick={() =>
-                      this.addFriend(
-                        this.state.user.id,
-                        user.id
-                      )
-                    }
-                  >
-                    <p className="add_btn_text"> Add Friend</p>
-                  </button>
-                </div>
-              </div>
-            ) : null;
-          })
-console.log(renderUsers)
+      // console.log(user, 'user')
+      return user.user_id !== this.state.user.id && !user.is_friend ? (
+        <div key={index} className="filtered_user">
+          <div className="filtered_user_img_container">
+            <img
+              className="filtered_user_img"
+              src={user.profile_picture}
+              alt=""
+            />
+          </div>
+          <div className="filtered_user_name">
+            <span className="filtered_user_first_name">{user.first_name}</span>
+            {"    "}
+            <span className="filtered_user_last_name">{user.last_name}</span>
+            {"     "}
+          </div>
+          <div className="filtered_user_add_btn_container">
+            <button
+              className="filtered_user_add_btn"
+              onClick={() => this.addFriend(this.state.user.id, user.id)}
+            >
+              <p className="add_btn_text"> Add Friend</p>
+            </button>
+          </div>
+        </div>
+      ) : null;
+    });
+    console.log(renderUsers);
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
@@ -151,7 +146,7 @@ console.log(renderUsers)
               console.log("loggin out");
             }}
           >
-            <a href='http://localhost:3005/auth/logout'>Logout</a>
+            <a href="http://localhost:3005/auth/logout">Logout</a>
           </button>
 
           {/* axios.get("/auth/logout").then(res=>{
