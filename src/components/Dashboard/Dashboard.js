@@ -31,7 +31,7 @@ class Dashboard extends Component {
   }
 
   handleChange(prop, val) {
-    this.setState({ [prop]: val }, _ => this.getRecommended());
+    this.setState({ [prop]: val },_ =>this.getRecommended());
   }
   getUserInfo() {
     axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
@@ -59,7 +59,7 @@ class Dashboard extends Component {
         ? true
         : false;
     });
-
+  
     this.setState({ users: recommended_users });
     console.log(recommended_users);
   }
