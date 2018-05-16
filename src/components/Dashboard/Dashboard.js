@@ -12,8 +12,10 @@ class Dashboard extends Component {
       user: [],
       sort_parameter: "",
       users: [],
+      recommended_users: [],
       currentPage: 1,
-      usersPerPage: 4
+      usersPerPage: 4,
+      recommended_clicked: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.getRecommended = this.getRecommended.bind(this);
@@ -31,7 +33,7 @@ class Dashboard extends Component {
   }
 
   handleChange(prop, val) {
-    this.setState({ [prop]: val },_ =>this.getRecommended());
+    this.setState({ [prop]: val }, _ => this.getRecommended());
   }
   getUserInfo() {
     axios.get("/getUserInfo").then(resp => this.setState({ user: resp.data }));
@@ -59,9 +61,13 @@ class Dashboard extends Component {
         ? true
         : false;
     });
-  
-    this.setState({ users: recommended_users });
-    console.log(recommended_users);
+
+    this.setState({
+      recommended_users: recommended_users,
+      recommended_clicked: true
+    });
+
+    //alternative: have recommended_users array on state.  set it to that and have app map through filtered_users if filter isn't on defualt
   }
   addFriend(user_id, friend_id) {
     axios.post("/addFriend", { user_id, friend_id }).then(response => {
@@ -78,17 +84,34 @@ class Dashboard extends Component {
   //   console.log('update' , oldState, 'new state' , this.state)
   // }
   render() {
-    let { users, currentPage, usersPerPage } = this.state;
+    let {
+      users,
+      currentPage,
+      usersPerPage,
+      recommended_users,
+      recommended_clicked
+    } = this.state;
 
     // Logic for displaying current users
     let indexOfLastUser = currentPage * usersPerPage;
     let indexOfFirstUser = indexOfLastUser - usersPerPage;
-    let currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+    let currentUsers = this.state.recommended_clicked
+      ? recommended_users.slice(indexOfFirstUser, indexOfLastUser)
+      : users.slice(indexOfFirstUser, indexOfLastUser);
     // console.log(currentUsers, indexOfFirstUser, indexOfLastUser, currentPage);
 
     // Logic for displaying page numbers
     let pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+    for (
+      let i = 1;
+      i <=
+      Math.ceil(
+        recommended_clicked
+          ? recommended_users.length / usersPerPage
+          : users.length / usersPerPage
+      );
+      i++
+    ) {
       pageNumbers.push(i);
     }
     // console.log(pageNumbers, 'pages')
@@ -128,7 +151,7 @@ class Dashboard extends Component {
         </div>
       ) : null;
     });
-    console.log(renderUsers);
+    console.log(renderPageNumbers, "pages");
     return (
       <div className="dashboard_root">
         <div className="dashboard_header">
@@ -196,7 +219,7 @@ class Dashboard extends Component {
                   this.handleChange("sort_parameter", e.target.value)
                 }
               >
-                <option defaultValue>...</option>
+                <option defaultValue="...">...</option>
                 <option value="first_name">First Name</option>
                 <option value="last_name">Last Name</option>
                 <option value="gender">Gender</option>

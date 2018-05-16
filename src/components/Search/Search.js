@@ -13,8 +13,10 @@ class Search extends Component {
       search_input: "",
       user: [],
       users: [],
+      filtered_users: [],
       currentPage: 1,
-      usersPerPage: 4
+      usersPerPage: 4,
+      filtered_clicked: false
     };
     this.handleClick = this.handleClick.bind(this);
     this.formatCase = this.formatCase.bind(this);
@@ -51,16 +53,20 @@ class Search extends Component {
     //   .then(resp => {
     //     this.setState({ users: resp.data });
     //   });
-    const filtered_users = this.state.users.filter(user =>{
-       return user[this.state.search_parameter]===this.state.search_input? true:false
-    })
-    this.setState({users: filtered_users})
+    const filtered_users = this.state.users.filter(user => {
+      return user[this.state.search_parameter] === this.state.search_input
+        ? true
+        : false;
+    });
+    this.setState({ filtered_users: filtered_users, filtered_clicked:true });
   }
   reset = () => {
     this.setState({
       search_input: "",
+      filtered_users:[],
       search_parameter: "...Search By",
-      currentPage: 1
+      currentPage: 1, 
+      filtered_clicked:false
     });
     this.getUsers();
     console.log("everything reset", this.state.search_input);
@@ -95,16 +101,27 @@ class Search extends Component {
   }
 
   render() {
-    const { users, currentPage, usersPerPage } = this.state;
+    const { users, currentPage, usersPerPage, filtered_users } = this.state;
 
     // Logic for displaying current users
     const indexOfLastUser = currentPage * usersPerPage;
     const indexOfFirstUser = indexOfLastUser - usersPerPage;
-    const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-    // console.log(currentUsers);
+    const currentUsers =
+      this.state.filtered_clicked
+        ? this.state.filtered_users.slice(indexOfFirstUser, indexOfLastUser)
+        : users.slice(indexOfFirstUser, indexOfLastUser);
 
     const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(users.length / usersPerPage); i++) {
+    for (
+      let i = 1;
+      i <=
+      Math.ceil(
+        filtered_users.length > 0
+          ? filtered_users.length / usersPerPage
+          : users.length / usersPerPage
+      );
+      i++
+    ) {
       pageNumbers.push(i);
     }
 
